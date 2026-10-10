@@ -264,7 +264,7 @@ extension LauncherView {
         quickActionInfo[descriptor.actionId] = info
     }
 
-    private func showOutcomeBanner(_ outcome: ActionOutcome, fallback: String) {
+    func showOutcomeBanner(_ outcome: ActionOutcome, fallback: String) {
         switch outcome {
         case .ok(let banner):
             showBanner(banner ?? fallback, style: .success, duration: Banner.success)
