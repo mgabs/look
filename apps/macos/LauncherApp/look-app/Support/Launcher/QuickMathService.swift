@@ -1,13 +1,25 @@
 import Foundation
 
-struct QuickMathResult {
-    let display: String
-    let raw: String
-    let subtitle: String
+public protocol QuickMathBridgeProtocol: AnyObject {
+    func calcInlineResult(query: String) -> (display: String, raw: String)?
+    func calcEvalResult(expr: String) -> (success: Bool, calculation: (display: String, raw: String)?, error: String?)
+    func instantAnswerResult(query: String) -> (text: String, source: String)?
 }
 
-enum QuickMathService {
-    static func evaluate(_ rawQuery: String, bridge: EngineBridge? = nil) -> QuickMathResult? {
+public struct QuickMathResult: Equatable {
+    public let display: String
+    public let raw: String
+    public let subtitle: String
+
+    public init(display: String, raw: String, subtitle: String) {
+        self.display = display
+        self.raw = raw
+        self.subtitle = subtitle
+    }
+}
+
+public enum QuickMathService {
+    public static func evaluate(_ rawQuery: String, bridge: QuickMathBridgeProtocol? = nil) -> QuickMathResult? {
         let trimmed = rawQuery.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
 
@@ -38,7 +50,7 @@ enum QuickMathService {
         // 4. Quick Math evaluation via Rust core/calc (if bridge available)
         if let bridge {
             let calcQuery = isExplicitQuestion ? query : trimmed
-            if let calc = bridge.calcInline(query: calcQuery) {
+            if let calc = bridge.calcInlineResult(query: calcQuery) {
                 return QuickMathResult(
                     display: calc.display,
                     raw: calc.raw,
@@ -48,7 +60,7 @@ enum QuickMathService {
 
             // If explicit question '?' was passed, try evaluating arithmetic directly
             if isExplicitQuestion {
-                let res = bridge.calcEval(expr: query)
+                let res = bridge.calcEvalResult(expr: query)
                 if let calc = res.calculation {
                     return QuickMathResult(
                         display: calc.display,
@@ -367,9 +379,9 @@ enum QuickMathService {
         "฿": "THB"
     ]
 
-    private static func evaluateCurrencyConversion(_ query: String, bridge: EngineBridge?) -> QuickMathResult? {
+    private static func evaluateCurrencyConversion(_ query: String, bridge: QuickMathBridgeProtocol?) -> QuickMathResult? {
         // Try live instant answer first if available
-        if let bridge, let answer = bridge.instantAnswer(query: query) {
+        if let bridge, let answer = bridge.instantAnswerResult(query: query) {
             return QuickMathResult(
                 display: answer.text,
                 raw: answer.text,
@@ -434,12 +446,17 @@ enum QuickMathService {
     private static func formatNumber(_ val: Double, decimals: Int = 4) -> String {
         if val == floor(val) && val < 1e12 && val > -1e12 {
             let formatter = NumberFormatter()
+            formatter.locale = Locale(identifier: "en_US_POSIX")
             formatter.numberStyle = .decimal
+            formatter.groupingSeparator = ","
             return formatter.string(from: NSNumber(value: Int64(val))) ?? "\(Int64(val))"
         }
 
         let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ","
+        formatter.decimalSeparator = "."
         formatter.maximumFractionDigits = decimals
         formatter.minimumFractionDigits = 0
         return formatter.string(from: NSNumber(value: val)) ?? String(format: "%.\(decimals)f", val)

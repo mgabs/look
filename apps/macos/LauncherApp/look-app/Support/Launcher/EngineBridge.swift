@@ -1707,3 +1707,21 @@ extension LauncherResult {
         )
     }
 }
+
+extension EngineBridge: QuickMathBridgeProtocol {
+    public nonisolated func calcInlineResult(query: String) -> (display: String, raw: String)? {
+        guard let calc = self.calcInline(query: query) else { return nil }
+        return (display: calc.display, raw: calc.raw)
+    }
+
+    public nonisolated func calcEvalResult(expr: String) -> (success: Bool, calculation: (display: String, raw: String)?, error: String?) {
+        let res = self.calcEval(expr: expr)
+        let calcTuple = res.calculation.map { (display: $0.display, raw: $0.raw) }
+        return (success: res.calculation != nil, calculation: calcTuple, error: res.error)
+    }
+
+    public nonisolated func instantAnswerResult(query: String) -> (text: String, source: String)? {
+        guard let ans = self.instantAnswer(query: query) else { return nil }
+        return (text: ans.text, source: ans.source)
+    }
+}
