@@ -331,9 +331,35 @@ final class ClipboardHistoryStore: ObservableObject {
         let normalized = term.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !normalized.isEmpty else { return entries }
 
-        return entries.filter { entry in
-            entry.content.localizedCaseInsensitiveContains(normalized)
+        let queryLower = normalized.lowercased()
+        var scored: [(entry: ClipboardHistoryEntry, score: Int)] = []
+
+        for entry in entries {
+            let contentLower = entry.content.lowercased()
+            let titleLower = entry.title.lowercased()
+
+            // Check exact substring match bonus
+            var score = 0
+            if contentLower.contains(queryLower) || titleLower.contains(queryLower) {
+                score += 500
+                if titleLower.starts(with: queryLower) || contentLower.starts(with: queryLower) {
+                    score += 500
+                }
+            }
+
+            // Fuzzy subsequence match via EngineBridge / look-matching
+            if let fScore = EngineBridge.shared.fuzzyScore(query: queryLower, title: titleLower) {
+                score += fScore
+            } else if let fScore = EngineBridge.shared.fuzzyScore(query: queryLower, title: contentLower) {
+                score += fScore / 2
+            } else if score == 0 {
+                continue
+            }
+
+            scored.append((entry, score))
         }
+
+        return scored.sorted { $0.score > $1.score }.map(\.entry)
     }
 
     func deleteEntry(id: UUID) {
@@ -489,7 +515,30 @@ final class ClipboardHistoryStore: ObservableObject {
     func searchImages(_ term: String) -> [ClipboardImageEntry] {
         let normalized = term.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !normalized.isEmpty else { return imageEntries }
-        return imageEntries.filter { $0.label.localizedCaseInsensitiveContains(normalized) }
+
+        let queryLower = normalized.lowercased()
+        var scored: [(entry: ClipboardImageEntry, score: Int)] = []
+
+        for entry in imageEntries {
+            let labelLower = entry.label.lowercased()
+            var score = 0
+            if labelLower.contains(queryLower) {
+                score += 500
+                if labelLower.starts(with: queryLower) {
+                    score += 500
+                }
+            }
+
+            if let fScore = EngineBridge.shared.fuzzyScore(query: queryLower, title: labelLower) {
+                score += fScore
+            } else if score == 0 {
+                continue
+            }
+
+            scored.append((entry, score))
+        }
+
+        return scored.sorted { $0.score > $1.score }.map(\.entry)
     }
 
     func deleteImageEntry(id: String) {
