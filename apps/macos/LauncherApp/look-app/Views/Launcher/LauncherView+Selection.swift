@@ -185,6 +185,20 @@ extension LauncherView {
         guard !appUIState.showsThemeSettings else { return }
         keyboardMonitor.start(
             onNext: {
+                if isPathQuery, let selectedResultID,
+                   let selected = displayedResults.first(where: { $0.id == selectedResultID }),
+                   selected.kind == .folder {
+                    var newPath = selected.path
+                    if !newPath.hasSuffix("/") { newPath += "/" }
+                    if query.hasPrefix("~") {
+                        let home = FileManager.default.homeDirectoryForCurrentUser.path
+                        if newPath.hasPrefix(home) {
+                            newPath = "~" + newPath.dropFirst(home.count)
+                        }
+                    }
+                    query = newPath
+                    return
+                }
                 moveSelection(.down, shouldAutocompleteCommand: true, preferCommandListInCommandMode: true)
             },
             onPrevious: {

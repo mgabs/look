@@ -435,6 +435,15 @@ struct LauncherView: View {
             .hasPrefix(AppConstants.Launcher.QueryPrefix.recent)
     }
 
+    var isPathQuery: Bool {
+        !isCommandMode && PathNavigationService.isPathQuery(query)
+    }
+
+    var pathResults: [LauncherResult] {
+        guard isPathQuery else { return [] }
+        return PathNavigationService.results(for: query)
+    }
+
     /// A leading `"` opens the prefix-discovery menu: a list of every query
     /// prefix with a short description. Typing after the `"` (e.g. `"folder`)
     /// filters the list by name/description; picking one fills the prefix in.
@@ -556,6 +565,7 @@ struct LauncherView: View {
         if isClipboardImageQuery { return clipboardImageResults }
         if isClipboardQuery { return clipboardResults }
         if isProcessQuery { return processResults }
+        if isPathQuery { return pathResults }
         // Recent URLs interleave with local results by frecency; web-search rows
         // stay last.
         let ranked = mergeByScore(backendFilteredResults, recentURLResults)
@@ -608,7 +618,7 @@ struct LauncherView: View {
     /// mode belongs HERE, not in each caller.
     var usesOwnResultPanel: Bool {
         isInLevel || isClipboardQuery || isClipboardImageQuery || isPrefixSuggestionQuery
-            || isCommandSuggestionQuery || isTranslationQuery || isProcessQuery
+            || isCommandSuggestionQuery || isTranslationQuery || isProcessQuery || isPathQuery
     }
 
     var isTranslationQuery: Bool {
