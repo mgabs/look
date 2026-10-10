@@ -5,6 +5,8 @@
 //! mode is adding a row; a shell that needs a `match` over mode names has
 //! bypassed this table.
 
+use std::fmt::Write;
+
 /// A field rather than a `#[cfg]` so `--list-modes` can say "macOS only"
 /// instead of pretending the mode does not exist.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -230,15 +232,13 @@ pub fn list_text() -> String {
             .note()
             .map(|note| format!(" [{note}]"))
             .unwrap_or_default();
-        out.push_str(&format!(
-            "{:<width$}  {}{aliases}{note}\n",
-            mode.name, mode.about
-        ));
+        let _ = writeln!(out, "{:<width$}  {}{aliases}{note}", mode.name, mode.about);
     }
-    out.push_str(&format!(
+    let _ = write!(
+        out,
         "\n{COMMANDS_HEADING}\n{:<width$}  {RELOAD_CONFIG_ABOUT}\n",
         RELOAD_CONFIG_COMMAND
-    ));
+    );
     out
 }
 

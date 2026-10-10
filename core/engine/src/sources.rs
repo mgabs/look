@@ -1356,10 +1356,12 @@ mod tests {
         let mut declarations = String::from(
             "[rows]\ndir = \"/tmp\"\nthen = [\"dup\"]\n\n[dup]\nbias = 100\napplies = \"files\"\ndo = [\"ls {path}\"]\n\n",
         );
+        use std::fmt::Write;
         for index in 0..MAX_GLOBAL_TARGETS {
-            declarations.push_str(&format!(
+            let _ = write!(
+                declarations,
                 "[a{index:02}]\nbias = {index}\napplies = \"files\"\ndo = [\"ls {{path}}\"]\n\n"
-            ));
+            );
         }
         let fixture = Fixture::new("applies-overlap", &declarations);
 

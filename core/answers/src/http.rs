@@ -98,13 +98,18 @@ fn split_status(stdout: &str) -> Option<Response> {
 /// Percent-encodes `value` for use in a URL query component (RFC 3986
 /// unreserved set passes through; everything else is `%XX`).
 pub fn encode(value: &str) -> String {
+    const HEX_UPPER: &[u8; 16] = b"0123456789ABCDEF";
     let mut out = String::with_capacity(value.len());
     for &b in value.as_bytes() {
         match b {
             b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => {
                 out.push(b as char)
             }
-            _ => out.push_str(&format!("%{:02X}", b)),
+            _ => {
+                out.push('%');
+                out.push(HEX_UPPER[(b >> 4) as usize] as char);
+                out.push(HEX_UPPER[(b & 0xF) as usize] as char);
+            }
         }
     }
     out

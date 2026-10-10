@@ -4,6 +4,7 @@
 
 use crate::{http, json::ValueExt, types::Answer};
 use std::collections::HashMap;
+use std::fmt::Write;
 use std::sync::{LazyLock, Mutex};
 use std::time::{Duration, Instant};
 
@@ -91,14 +92,14 @@ fn fetch(place: &str) -> Option<Answer> {
     if let Some(feels) = current.get_f64("apparent_temperature")
         && (feels - temp).abs() >= 1.0
     {
-        text.push_str(&format!(" (feels {}°C)", feels.round() as i64));
+        let _ = write!(text, " (feels {}°C)", feels.round() as i64);
     }
-    text.push_str(&format!(", {}.", wmo_description(code)));
+    let _ = write!(text, ", {}.", wmo_description(code));
     if let Some(humidity) = current.get_i64("relative_humidity_2m") {
-        text.push_str(&format!(" Humidity {humidity}%."));
+        let _ = write!(text, " Humidity {humidity}%.");
     }
     if let Some(wind) = current.get_f64("wind_speed_10m") {
-        text.push_str(&format!(" Wind {} km/h.", wind.round() as i64));
+        let _ = write!(text, " Wind {} km/h.", wind.round() as i64);
     }
     Some(Answer::text(text, "Weather"))
 }

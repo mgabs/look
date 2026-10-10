@@ -1,6 +1,8 @@
 //! Crypto spot price via CoinGecko (keyless). `id` is an already-normalized
 //! CoinGecko coin id from [`crate::parse::crypto`].
 
+use std::fmt::Write;
+
 use crate::{fmt, http, json::ValueExt, types::Answer};
 
 const TIMEOUT_SECS: u32 = 4;
@@ -17,7 +19,7 @@ pub fn answer(id: &str) -> Option<Answer> {
     let mut text = format!("{}: ${}", capitalize_words(id), fmt::format_number(usd));
     if let Some(change) = coin.get_f64("usd_24h_change") {
         let sign = if change >= 0.0 { "+" } else { "" };
-        text.push_str(&format!(" ({sign}{change:.2}% 24h)"));
+        let _ = write!(text, " ({sign}{change:.2}% 24h)");
     }
     let page = format!("https://www.coingecko.com/en/coins/{id}");
     Some(Answer::linked(text, "Crypto", Some(page), None))
