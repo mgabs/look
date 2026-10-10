@@ -44,7 +44,7 @@ REAL_DB_PATH := $(HOME)/Library/Application Support/look/look.db
 DEV_CONFIG_PATH ?= $(HOME)/.look/config.dev
 DEV_OPEN_ENV = env -u LOOK_DB_PATH LOOK_CONFIG_PATH="$(DEV_CONFIG_PATH)" LOOK_DEV_HINT=1 LOOK_LOG_LEVEL=debug LOOK_UI_DEBUG_EVENTS=1
 
-.PHONY: help core-check ffi-check ffi-build ffi-build-release core-build-x86_64 ffi-build-x86_64 ffi-unstale app-build app-build-release build-release app-ensure-bundle app-stop app-run app-install-dev app-run-dev app-uninstall-dev dev-cli app-logs app-logs-all symbols db-path db-status db-shell db-reset db-refresh
+.PHONY: help core-check ffi-check ffi-build ffi-build-release core-build-x86_64 ffi-build-x86_64 ffi-unstale app-build app-build-release build-release release app-ensure-bundle app-stop app-run app-install-dev app-run-dev app-uninstall-dev dev-cli app-logs app-logs-all symbols db-path db-status db-shell db-reset db-refresh
 
 help:
 	@printf "look developer tasks\n\n"
@@ -58,6 +58,7 @@ help:
 	@printf "  make app-build          - xcodebuild app (macOS, includes rust ffi build/link)\n"
 	@printf "  make app-build-release  - build release macOS app bundle (VERSION ?= date)\n"
 	@printf "  make build-release      - build and package release app with manifest in dist/\n"
+	@printf "  make release            - alias for build-release\n"
 	@printf "  make ffi-unstale        - drop RustBuild/liblook_ffi.a when the Rust build identity changes\n"
 	@printf "  make symbols            - verify ffi symbols in app binary\n\n"
 	@printf "run app\n"
@@ -121,6 +122,8 @@ app-build-release:
 
 build-release:
 	./scripts/build-release.sh "$${VERSION:-$$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo 0.0.0)}"
+
+release: build-release
 
 app-ensure-bundle:
 	@if [ ! -d "$(APP_BUNDLE)" ]; then echo "missing app bundle: $(APP_BUNDLE)"; exit 1; fi

@@ -2673,6 +2673,7 @@ struct LauncherView: View {
 
     @ViewBuilder
     private var testHintOverlay: some View {
+        #if DEBUG
         if shouldShowTestHint {
             Text("TEST APP")
                 .font(themeStore.uiFont(size: CGFloat(max(10, themeStore.settings.fontSize - 3)), weight: .bold))
@@ -2683,6 +2684,7 @@ struct LauncherView: View {
                 .padding(.top, 8)
                 .padding(.trailing, 10)
         }
+        #endif
     }
 
     @ViewBuilder
