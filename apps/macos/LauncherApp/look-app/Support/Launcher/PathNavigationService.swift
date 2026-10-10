@@ -47,42 +47,53 @@ enum PathNavigationService {
             return []
         }
 
-        var results: [LauncherResult] = []
+        var scored: [(result: LauncherResult, score: Int)] = []
 
-        let filtered = contents.filter { url in
-            if prefixFilter.isEmpty { return true }
-            return url.lastPathComponent.lowercased().hasPrefix(prefixFilter)
-        }
-
-        for (index, url) in filtered.enumerated() {
+        for url in contents {
             let name = url.lastPathComponent
+            let nameLower = name.lowercased()
             let isDirectory = (try? url.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) ?? false
             let kind: LauncherResultKind = isDirectory ? .folder : .file
             let displayPath = url.path
+
+            var score = 0
+            if prefixFilter.isEmpty {
+                score = isDirectory ? 10_000 : 5_000
+            } else if nameLower.hasPrefix(prefixFilter) {
+                score = 20_000 + (isDirectory ? 2_000 : 0)
+            } else if nameLower.contains(prefixFilter) {
+                score = 15_000 + (isDirectory ? 2_000 : 0)
+            } else if let fScore = EngineBridge.shared.fuzzyScore(query: prefixFilter, title: nameLower) {
+                score = 5_000 + fScore + (isDirectory ? 2_000 : 0)
+            } else {
+                continue
+            }
 
             var subtitle = displayPath
             if isDirectory {
                 subtitle = "\(displayPath)  •  Tab to enter folder"
             }
 
-            results.append(
-                LauncherResult(
-                    id: "path:\(displayPath)",
-                    kind: kind,
-                    title: name,
-                    subtitle: subtitle,
-                    path: displayPath,
-                    score: 100_000 - index
-                )
+            let item = LauncherResult(
+                id: "path:\(displayPath)",
+                kind: kind,
+                title: name,
+                subtitle: subtitle,
+                path: displayPath,
+                score: score
             )
+            scored.append((item, score))
         }
 
-        // Sort folders first, then files alphabetically
-        return results.sorted { a, b in
-            if a.kind == b.kind {
-                return a.title.localizedCaseInsensitiveCompare(b.title) == .orderedAscending
+        // Sort by score descending, then folders first, then title
+        return scored.sorted { a, b in
+            if a.score != b.score {
+                return a.score > b.score
             }
-            return a.kind == .folder
-        }
+            if a.result.kind != b.result.kind {
+                return a.result.kind == .folder
+            }
+            return a.result.title.localizedCaseInsensitiveCompare(b.result.title) == .orderedAscending
+        }.map(\.result)
     }
 }
