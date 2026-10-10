@@ -1,0 +1,12 @@
+• Run & Background (! or $): Run one-liner shell commands directly (! pnpm build, ! curl -I
+  localhost:8080) with inline output toast.
+• Port / Process Killer: :kill 3000 or :kill node with fuzzy PID selection.
+• Hitting Tab on any search result reveals secondary keyboard actions:
+      • App: Enter = Open | Cmd+Enter = Reveal in Finder | Cmd+O = Open with... | Cmd+R = Restart
+      app.
+      • File: Enter = Open | Cmd+C = Copy path | Cmd+Shift+C = Copy file content | Cmd+Delete =
+      Move to Trash.
+      • URL: Enter = Open default | Cmd+1/2 = Open in specific browser / profile.
+
+
+

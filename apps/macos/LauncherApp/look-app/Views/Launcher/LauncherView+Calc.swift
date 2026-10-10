@@ -5,17 +5,17 @@ import Foundation
 /// crate via `EngineBridge`, so this file is presentation and placement only.
 /// Mirrors `LauncherView+URLResults.swift`.
 extension LauncherView {
-    /// A synthesized row for the current query's arithmetic answer, or nil.
-    /// Network-free; cheap enough to call on every keystroke.
+    /// A synthesized row for the current query's arithmetic, unit conversion,
+    /// currency, or timestamp answer. Network-free & fast.
     var calcResult: LauncherResult? {
-        guard allowsSuggestionRows, let calc = bridge.calcInline(query: query) else { return nil }
+        guard allowsSuggestionRows, let calc = QuickMathService.evaluate(query, bridge: bridge) else { return nil }
         let expr = query.trimmingCharacters(in: .whitespacesAndNewlines)
 
         var result = LauncherResult(
             id: "\(AppConstants.Launcher.Calc.resultIDPrefix)\(calc.raw)",
             kind: .app,
             title: calc.display,
-            subtitle: "\(expr)  •  \(AppConstants.Launcher.Calc.enterToCopyHint)",
+            subtitle: calc.subtitle,
             path: calc.raw,
             score: .max
         )

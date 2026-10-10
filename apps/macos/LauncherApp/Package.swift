@@ -47,6 +47,7 @@ let package = Package(
                 "Support/QuickActions/LaunchpadGrid.swift",
                 "Models/SourceLevel.swift",
                 "Support/Launcher/SourceLevelStack.swift",
+                "Support/Launcher/QuickMathService.swift",
             ]
         ),
         .testTarget(
