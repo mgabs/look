@@ -32,8 +32,20 @@ extension LauncherView {
             hideLauncherWindow(restorePreviousApp: false)
             return
         case .commandSuggestion(let commandID):
-            // Command-discovery row: enter that command's panel (empty input).
-            enterCommandMode(commandID: commandID, prefilledInput: "")
+            switch commandID {
+            case AppConstants.Launcher.Command.sleep,
+                 AppConstants.Launcher.Command.lock,
+                 AppConstants.Launcher.Command.mute:
+                activeCommandID = commandID
+                commandInput = ""
+                runCommandModeAction()
+            case AppConstants.Launcher.Command.theme,
+                 AppConstants.Launcher.Command.caff,
+                 AppConstants.Launcher.Command.caffeinate:
+                enterCommandMode(commandID: commandID, prefilledInput: "")
+            default:
+                enterCommandMode(commandID: commandID, prefilledInput: "")
+            }
             return
         case .calc(let raw):
             // Calculator row: copy the raw value, launcher out of the way.

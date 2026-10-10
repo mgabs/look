@@ -23,6 +23,16 @@ struct AppCommand: Identifiable {
             return "checklist"
         case AppConstants.Launcher.Command.speed:
             return "speedometer"
+        case AppConstants.Launcher.Command.sleep:
+            return "moon.zzz"
+        case AppConstants.Launcher.Command.lock:
+            return "lock"
+        case AppConstants.Launcher.Command.mute:
+            return "speaker.slash"
+        case AppConstants.Launcher.Command.theme:
+            return "circle.righthalf.filled"
+        case AppConstants.Launcher.Command.caff, AppConstants.Launcher.Command.caffeinate:
+            return "cup.and.saucer"
         default:
             return "terminal"
         }
@@ -87,6 +97,12 @@ enum AppConstants {
             static let pomo = "pomo"
             static let todo = "todo"
             static let speed = "speed"
+            static let sleep = "sleep"
+            static let lock = "lock"
+            static let mute = "mute"
+            static let theme = "theme"
+            static let caff = "caff"
+            static let caffeinate = "caffeinate"
         }
 
         enum AIAction {
@@ -736,6 +752,12 @@ enum AppConstants {
             (Command.kill, "Force kill app or process by name, PID, or port", "Type a name, PID, or port"),
             (Command.shell, "Run a shell command", "Type shell command"),
             (Command.sys, "Show system information", "View system info"),
+            (Command.sleep, "Put display or system to sleep", "Press Enter to sleep"),
+            (Command.lock, "Lock screen immediately", "Press Enter to lock"),
+            (Command.mute, "Toggle mute on/off", "Press Enter to toggle mute"),
+            (Command.theme, "Toggle dark/light theme", "dark, light, or toggle"),
+            (Command.caff, "Keep Mac awake (e.g. 1h, 30m)", "Duration (e.g. 1h, 30m, off)"),
+            (Command.caffeinate, "Keep Mac awake (e.g. 1h, 30m)", "Duration (e.g. 1h, 30m, off)"),
         ]
 
         static let commandCatalog: [AppCommand] = commandDefinitions.map { definition in

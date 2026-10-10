@@ -296,8 +296,104 @@ extension LauncherView {
             }
         case AppConstants.Launcher.Command.sys:
             commandFeedback = ""
+        case AppConstants.Launcher.Command.sleep:
+            hideLauncherWindow(restorePreviousApp: false)
+            Task {
+                _ = await AppleScriptRunner.run(
+                    "tell application \"System Events\" to sleep",
+                    successBanner: nil,
+                    failureMessage: "Could not sleep"
+                )
+            }
+        case AppConstants.Launcher.Command.lock:
+            hideLauncherWindow(restorePreviousApp: false)
+            Task {
+                _ = await AppleScriptRunner.run(
+                    "tell application \"System Events\" to key code 12 using {control down, command down}",
+                    successBanner: nil,
+                    failureMessage: "Could not lock screen"
+                )
+            }
+        case AppConstants.Launcher.Command.mute:
+            Task {
+                let adapter = ActionAdapterRegistry.adapter(for: LaunchpadActionID.mic) ?? MicControl()
+                let outcome = await adapter.apply(.toggle)
+                await MainActor.run {
+                    showOutcomeBanner(outcome, fallback: "Mute toggled")
+                    hideLauncherWindow(restorePreviousApp: false)
+                }
+            }
+        case AppConstants.Launcher.Command.theme:
+            let arg = commandArgsPart.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            Task {
+                let adapter = ActionAdapterRegistry.adapter(for: LaunchpadActionID.theme) ?? ThemeControl()
+                let intent: ActionIntent
+                if arg == "dark" {
+                    intent = .setOn(true)
+                } else if arg == "light" {
+                    intent = .setOn(false)
+                } else {
+                    intent = .toggle
+                }
+                let outcome = await adapter.apply(intent)
+                await MainActor.run {
+                    showOutcomeBanner(outcome, fallback: "Theme updated")
+                    hideLauncherWindow(restorePreviousApp: false)
+                }
+            }
+        case AppConstants.Launcher.Command.caff, AppConstants.Launcher.Command.caffeinate:
+            let arg = commandArgsPart.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            let duration: TimeInterval?
+            if arg.isEmpty || arg == "on" {
+                duration = nil
+            } else if arg == "off" {
+                KeepAwakeManager.shared.setActive(false)
+                showBanner("Keep Awake off", style: .info, duration: 1.5)
+                hideLauncherWindow(restorePreviousApp: false)
+                return
+            } else {
+                duration = parseDuration(arg)
+            }
+            KeepAwakeManager.shared.setActive(true, duration: duration)
+            if let duration {
+                let durationDesc = formatDuration(duration)
+                showBanner("Keep Awake on (\(durationDesc))", style: .info, duration: 2.0)
+            } else {
+                showBanner("Keep Awake on", style: .info, duration: 1.5)
+            }
+            hideLauncherWindow(restorePreviousApp: false)
         default:
             setCommandError("Unsupported command")
+        }
+    }
+
+    private func parseDuration(_ input: String) -> TimeInterval? {
+        let scanner = Scanner(string: input)
+        guard let value = scanner.scanDouble() else { return nil }
+        let unit = scanner.scanCharacters(from: .letters)?.lowercased() ?? "m"
+        switch unit {
+        case "s", "sec", "secs", "second", "seconds":
+            return value
+        case "m", "min", "mins", "minute", "minutes":
+            return value * 60
+        case "h", "hr", "hrs", "hour", "hours":
+            return value * 3600
+        case "d", "day", "days":
+            return value * 86400
+        default:
+            return value * 60
+        }
+    }
+
+    private func formatDuration(_ seconds: TimeInterval) -> String {
+        if seconds >= 3600 {
+            let hours = seconds / 3600
+            return hours.truncatingRemainder(dividingBy: 1) == 0 ? "\(Int(hours))h" : String(format: "%.1fh", hours)
+        } else if seconds >= 60 {
+            let mins = seconds / 60
+            return mins.truncatingRemainder(dividingBy: 1) == 0 ? "\(Int(mins))m" : String(format: "%.1fm", mins)
+        } else {
+            return "\(Int(seconds))s"
         }
     }
 

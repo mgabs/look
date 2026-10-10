@@ -8,16 +8,28 @@ final class KeepAwakeManager {
     static let shared = KeepAwakeManager()
 
     private var token: (any NSObjectProtocol)?
+    private var timer: Timer?
 
     var isActive: Bool { token != nil }
 
-    func setActive(_ active: Bool) {
+    func setActive(_ active: Bool, duration: TimeInterval? = nil) {
+        timer?.invalidate()
+        timer = nil
+
         if active {
-            guard token == nil else { return }
-            token = ProcessInfo.processInfo.beginActivity(
-                options: [.idleSystemSleepDisabled, .idleDisplaySleepDisabled],
-                reason: "Keep Awake"
-            )
+            if token == nil {
+                token = ProcessInfo.processInfo.beginActivity(
+                    options: [.idleSystemSleepDisabled, .idleDisplaySleepDisabled],
+                    reason: "Keep Awake"
+                )
+            }
+            if let duration, duration > 0 {
+                timer = Timer.scheduledTimer(withTimeInterval: duration, repeats: false) { [weak self] _ in
+                    Task { @MainActor in
+                        self?.setActive(false)
+                    }
+                }
+            }
         } else if let token {
             ProcessInfo.processInfo.endActivity(token)
             self.token = nil
