@@ -151,6 +151,15 @@ final class ThemeStore: ObservableObject {
                     if !value.isEmpty, BuiltinThemePreset.preset(forThemeName: value) == nil {
                         warnings.append("theme '\(value)' not found")
                     }
+                case "secondary_calendar":
+                    if SecondaryCalendarKind(rawValue: value.lowercased()) == nil {
+                        let expected = SecondaryCalendarKind.allCases.map(\.rawValue).joined(separator: " or ")
+                        warnings.append("\(key)=\(value) invalid (expected \(expected))")
+                    }
+                case "hijri_day_offset":
+                    if let parsed = Int(value), parsed < -2 || parsed > 2 {
+                        warnings.append("\(key)=\(value) invalid (must be between -2 and 2)")
+                    }
                 default:
                     break
                 }
@@ -301,6 +310,9 @@ final class ThemeStore: ObservableObject {
         ConfigFileLines.upsert(&lines, key: "super_actions_enabled", value: settings.superActionsEnabled ? "true" : "false")
 
         ConfigFileLines.upsert(&lines, key: "animations_enabled", value: settings.animationsEnabled ? "true" : "false")
+
+        ConfigFileLines.upsert(&lines, key: "secondary_calendar", value: settings.secondaryCalendar.rawValue)
+        ConfigFileLines.upsert(&lines, key: "hijri_day_offset", value: String(settings.hijriDayOffset))
 
         do {
             try ConfigFileLines.render(lines).write(to: path, atomically: true, encoding: .utf8)
@@ -647,6 +659,14 @@ final class ThemeStore: ObservableObject {
                 if let parsed = parseBool(value) {
                     settings.animationsEnabled = parsed
                 }
+            case "secondary_calendar":
+                if let mode = SecondaryCalendarKind(rawValue: value.lowercased()) {
+                    settings.secondaryCalendar = mode
+                }
+            case "hijri_day_offset":
+                if let parsed = Int(value), (-2...2).contains(parsed) {
+                    settings.hijriDayOffset = parsed
+                }
             case "ui_background_image":
                 if !value.isEmpty {
                     settings.backgroundImagePath = value
@@ -989,6 +1009,11 @@ super_actions_enabled=false
 # Launcher animations (open cascade, selection glide, caret glide).
 # false shows every change instantly.
 animations_enabled=true
+
+# Secondary calendar in clock tile: none, lunar (East Asian), hijri (Islamic)
+secondary_calendar=lunar
+# Hijri calendar day adjustment offset (-2 to 2) for local moon sighting
+hijri_day_offset=0
 
 # Search aliases (apps + System Settings). Format: alias_<keyword>=Term1|Term2|Term3
 alias_note=Notion|Obsidian|Notes|Apple Notes|Bear|Logseq

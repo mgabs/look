@@ -712,6 +712,8 @@ enum AppConstants {
             static let lunarLabel = "Lunar"
             /// Caption when today falls in the intercalary (leap) lunar month.
             static let lunarLeapLabel = "Lunar leap"
+            /// Caption under today's Hijri day/month in the clock tile.
+            static let hijriLabel = "Hijri"
 
             /// SF Symbol for the Battery info tile, and its label when a battery
             /// is present.

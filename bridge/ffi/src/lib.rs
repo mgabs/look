@@ -183,6 +183,21 @@ pub extern "C" fn look_lunar_date_json(year: i64, month: i64, day: i64, tz: f64)
     .unwrap_or(std::ptr::null_mut())
 }
 
+/// Hijri date JSON (`{day, month, year}`) for a Gregorian `(year, month, day)`
+/// with day adjustment offset `offset_days`. Free the result with `look_free_cstring`.
+#[unsafe(no_mangle)]
+pub extern "C" fn look_hijri_date_json(
+    year: i64,
+    month: i64,
+    day: i64,
+    offset_days: i64,
+) -> *mut c_char {
+    std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        lunar_api::look_hijri_date_json_impl(year, month, day, offset_days)
+    }))
+    .unwrap_or(std::ptr::null_mut())
+}
+
 /// The resolved `launcher_hotkey`. Free with `look_free_cstring`.
 #[unsafe(no_mangle)]
 pub extern "C" fn look_launcher_hotkey_json() -> *mut c_char {

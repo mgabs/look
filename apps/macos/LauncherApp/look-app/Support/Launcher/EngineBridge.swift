@@ -264,6 +264,10 @@ private func look_hotkey_check_json(_ spec: UnsafePointer<CChar>?) -> UnsafeMuta
 nonisolated
 private func look_lunar_date_json(_ year: Int64, _ month: Int64, _ day: Int64, _ tz: Double) -> UnsafeMutablePointer<CChar>?
 
+@_silgen_name("look_hijri_date_json")
+nonisolated
+private func look_hijri_date_json(_ year: Int64, _ month: Int64, _ day: Int64, _ offsetDays: Int64) -> UnsafeMutablePointer<CChar>?
+
 @_silgen_name("look_refresh_run_blocks_json")
 nonisolated
 private func look_refresh_run_blocks_json() -> UnsafeMutablePointer<CChar>?
@@ -345,6 +349,13 @@ nonisolated struct LunarDate: Decodable {
     let month: Int
     let year: Int
     let leap: Bool
+}
+
+/// A resolved Islamic (Hijri) date from the shared `core/lunar` crate.
+nonisolated struct HijriDate: Decodable {
+    let day: Int
+    let month: Int
+    let year: Int
 }
 
 final class EngineBridge: @unchecked Sendable {
@@ -655,6 +666,16 @@ final class EngineBridge: @unchecked Sendable {
         defer { look_free_cstring(ptr) }
         guard let data = String(cString: ptr).data(using: .utf8) else { return nil }
         return try? JSONDecoder().decode(LunarDate.self, from: data)
+    }
+
+    /// Hijri (Islamic) date from the shared core with day adjustment offset.
+    nonisolated func hijriDate(year: Int, month: Int, day: Int, offsetDays: Int = 0) -> HijriDate? {
+        guard let ptr = look_hijri_date_json(Int64(year), Int64(month), Int64(day), Int64(offsetDays)) else {
+            return nil
+        }
+        defer { look_free_cstring(ptr) }
+        guard let data = String(cString: ptr).data(using: .utf8) else { return nil }
+        return try? JSONDecoder().decode(HijriDate.self, from: data)
     }
 
     /// Runs the shared core speed test. Blocks for 15 seconds and up, so call it

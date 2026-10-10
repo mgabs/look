@@ -170,6 +170,22 @@ enum LauncherLayout: String, CaseIterable, Codable, Identifiable {
     var title: String { rawValue.capitalized }
 }
 
+enum SecondaryCalendarKind: String, CaseIterable, Codable, Identifiable {
+    case none
+    case lunar
+    case hijri
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .none: return "None"
+        case .lunar: return "Lunar (East Asian)"
+        case .hijri: return "Hijri (Islamic)"
+        }
+    }
+}
+
 /// Which AI backend powers query understanding. On-device Apple Intelligence is
 /// the only option today; cloud providers can be added as new cases without
 /// touching the rest of the app. Persisted in `~/.look/config` as `ai_provider`.
@@ -314,6 +330,14 @@ struct ThemeSettings: Codable, Equatable {
 
     /// Hotkey specs keyed by config key, see `ConfigurableShortcut`.
     var shortcutBindings: [String: String] = [:]
+
+    /// Which secondary calendar to display in the clock slot: none, lunar, or hijri.
+    /// Persisted in `~/.look/config` under `secondary_calendar`.
+    var secondaryCalendar: SecondaryCalendarKind = .lunar
+
+    /// Day adjustment for the Hijri calendar (-2..=+2 days) for moon sighting.
+    /// Persisted in `~/.look/config` under `hijri_day_offset`.
+    var hijriDayOffset: Int = 0
 
     static let `default` = ThemeSettings()
 }

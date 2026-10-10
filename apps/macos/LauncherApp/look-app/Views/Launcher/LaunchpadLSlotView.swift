@@ -150,7 +150,7 @@ private struct LaunchpadClockTile: View {
     private typealias Const = AppConstants.Launcher.Launchpad
 
     @State private var now = Date()
-    @State private var lunar: LunarDate?
+    @State private var secondaryBadge: SecondaryCalendarBadgeData?
 
     @StateObject private var ticker = LauncherActiveTicker(
         every: AppConstants.Launcher.Launchpad.clockTickSeconds
@@ -160,7 +160,7 @@ private struct LaunchpadClockTile: View {
         LaunchpadSlotCard(
             themeStore: themeStore,
             iconName: "clock",
-            headerTrailing: lunar.map { AnyView(LunarBadge(lunar: $0, themeStore: themeStore)) }
+            headerTrailing: secondaryBadge.map { AnyView(SecondaryCalendarBadge(badge: $0, themeStore: themeStore)) }
         ) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(now, format: .dateTime.hour().minute())
@@ -172,57 +172,90 @@ private struct LaunchpadClockTile: View {
                     .foregroundColor(themeStore.secondaryTextColor())
             }
         }
-        .onAppear { refreshLunar(for: now) }
+        .onAppear { refreshCalendar(for: now) }
+        .onChange(of: themeStore.settings.secondaryCalendar) { _, _ in
+            refreshCalendar(for: now)
+        }
+        .onChange(of: themeStore.settings.hijriDayOffset) { _, _ in
+            refreshCalendar(for: now)
+        }
         .onReceive(ticker.tick) { tick in
-            // Recompute only when the calendar day rolls over (the lunar date is
-            // stable within a day), or if the first read hasn't landed yet.
-            if lunar == nil || !Calendar.current.isDate(tick, inSameDayAs: now) {
-                refreshLunar(for: tick)
+            if secondaryBadge == nil || !Calendar.current.isDate(tick, inSameDayAs: now) {
+                refreshCalendar(for: tick)
             }
             now = tick
         }
     }
 
-    private func refreshLunar(for date: Date) {
-        lunar = LunarToday.resolve(for: date)
+    private func refreshCalendar(for date: Date) {
+        secondaryBadge = SecondaryCalendarResolver.resolve(
+            for: date,
+            kind: themeStore.settings.secondaryCalendar,
+            hijriOffset: themeStore.settings.hijriDayOffset
+        )
     }
 }
 
-/// Resolves a Gregorian date to its lunar date via the shared core, at the
-/// viewer's local UTC offset. Shared by the clock tile and the header clock so
-/// the conversion lives in one place.
-private enum LunarToday {
-    static func resolve(for date: Date) -> LunarDate? {
+/// Data model representing a secondary calendar readout.
+private struct SecondaryCalendarBadgeData: Equatable {
+    let dayMonth: String
+    let label: String
+    let inlineText: String
+}
+
+private enum SecondaryCalendarResolver {
+    static func resolve(
+        for date: Date,
+        kind: SecondaryCalendarKind,
+        hijriOffset: Int = 0
+    ) -> SecondaryCalendarBadgeData? {
         let parts = Calendar.current.dateComponents([.year, .month, .day], from: date)
         guard let year = parts.year, let month = parts.month, let day = parts.day else { return nil }
-        let tzHours = Double(TimeZone.current.secondsFromGMT(for: date)) / 3600.0
-        return EngineBridge.shared.lunarDate(year: year, month: month, day: day, tzHours: tzHours)
-    }
 
-    /// The compact one-line label used in the header clock, e.g. "12/6 Lunar".
-    static func inlineLabel(_ lunar: LunarDate) -> String {
-        let name = lunar.leap
-            ? AppConstants.Launcher.Launchpad.lunarLeapLabel
-            : AppConstants.Launcher.Launchpad.lunarLabel
-        return "\(lunar.day)/\(lunar.month) \(name)"
+        switch kind {
+        case .none:
+            return nil
+        case .lunar:
+            let tzHours = Double(TimeZone.current.secondsFromGMT(for: date)) / 3600.0
+            guard let lunar = EngineBridge.shared.lunarDate(year: year, month: month, day: day, tzHours: tzHours) else {
+                return nil
+            }
+            let label = lunar.leap
+                ? AppConstants.Launcher.Launchpad.lunarLeapLabel
+                : AppConstants.Launcher.Launchpad.lunarLabel
+            return SecondaryCalendarBadgeData(
+                dayMonth: "\(lunar.day)/\(lunar.month)",
+                label: label,
+                inlineText: "\(lunar.day)/\(lunar.month) \(label)"
+            )
+        case .hijri:
+            guard let hijri = EngineBridge.shared.hijriDate(year: year, month: month, day: day, offsetDays: hijriOffset) else {
+                return nil
+            }
+            let label = AppConstants.Launcher.Launchpad.hijriLabel
+            return SecondaryCalendarBadgeData(
+                dayMonth: "\(hijri.day)/\(hijri.month)",
+                label: label,
+                inlineText: "\(hijri.day)/\(hijri.month) \(label)"
+            )
+        }
     }
 }
 
-/// Today's lunar day/month plus a "Lunar" (or "Lunar leap") caption, shown in the
-/// clock tile's header corner.
-private struct LunarBadge: View {
-    let lunar: LunarDate
+/// Secondary calendar badge in clock tile header.
+private struct SecondaryCalendarBadge: View {
+    let badge: SecondaryCalendarBadgeData
     var themeStore: ThemeStore
 
     private typealias Const = AppConstants.Launcher.Launchpad
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 0) {
-            Text("\(lunar.day)/\(lunar.month)")
+            Text(badge.dayMonth)
                 .font(themeStore.uiFont(size: Const.captionFontSize + 5, weight: .semibold))
                 .foregroundColor(themeStore.secondaryTextColor())
                 .monospacedDigit()
-            Text(lunar.leap ? Const.lunarLeapLabel : Const.lunarLabel)
+            Text(badge.label)
                 .font(themeStore.uiFont(size: Const.captionFontSize - 1))
                 .foregroundColor(themeStore.mutedTextColor())
         }
@@ -231,15 +264,14 @@ private struct LunarBadge: View {
 
 // MARK: - Header clock
 
-/// Time + Gregorian date (full strength) with the lunar date dimmed below, kept
-/// visible while the Todo or Pomo slot occupies the tile.
+/// Time + Gregorian date (full strength) with secondary calendar date dimmed below.
 private struct LaunchpadHeaderClock: View {
     var themeStore: ThemeStore
 
     private typealias Const = AppConstants.Launcher.Launchpad
 
     @State private var now = Date()
-    @State private var lunar: LunarDate?
+    @State private var secondaryBadge: SecondaryCalendarBadgeData?
 
     @StateObject private var ticker = LauncherActiveTicker(
         every: AppConstants.Launcher.Launchpad.clockTickSeconds
@@ -254,20 +286,34 @@ private struct LaunchpadHeaderClock: View {
             Text(now, format: .dateTime.weekday().month().day())
                 .font(themeStore.uiFont(size: Const.headerClockDateFontSize))
                 .foregroundColor(themeStore.secondaryTextColor())
-            if let lunar {
-                Text(LunarToday.inlineLabel(lunar))
+            if let secondaryBadge {
+                Text(secondaryBadge.inlineText)
                     .font(themeStore.uiFont(size: Const.headerClockDateFontSize))
                     .foregroundColor(themeStore.mutedTextColor())
                     .monospacedDigit()
             }
         }
-        .onAppear { lunar = LunarToday.resolve(for: now) }
+        .onAppear { refreshCalendar(for: now) }
+        .onChange(of: themeStore.settings.secondaryCalendar) { _, _ in
+            refreshCalendar(for: now)
+        }
+        .onChange(of: themeStore.settings.hijriDayOffset) { _, _ in
+            refreshCalendar(for: now)
+        }
         .onReceive(ticker.tick) { tick in
-            if lunar == nil || !Calendar.current.isDate(tick, inSameDayAs: now) {
-                lunar = LunarToday.resolve(for: tick)
+            if secondaryBadge == nil || !Calendar.current.isDate(tick, inSameDayAs: now) {
+                refreshCalendar(for: tick)
             }
             now = tick
         }
+    }
+
+    private func refreshCalendar(for date: Date) {
+        secondaryBadge = SecondaryCalendarResolver.resolve(
+            for: date,
+            kind: themeStore.settings.secondaryCalendar,
+            hijriOffset: themeStore.settings.hijriDayOffset
+        )
     }
 }
 

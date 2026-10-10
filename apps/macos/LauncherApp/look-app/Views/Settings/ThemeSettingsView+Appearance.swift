@@ -23,6 +23,35 @@ extension ThemeSettingsView {
                 }
 
                 HStack(spacing: 14) {
+                    inlinePickerLabel("Calendar")
+                    Picker("Secondary Calendar", selection: $settings.secondaryCalendar) {
+                        ForEach(SecondaryCalendarKind.allCases) { kind in
+                            Text(kind.title).tag(kind)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .labelsHidden()
+                    .frame(width: AppConstants.ThemeUI.pickerWidth)
+
+                    if settings.secondaryCalendar == .hijri {
+                        Spacer().frame(width: 20)
+                        inlinePickerLabel("Offset")
+                        Picker("Day Offset", selection: $settings.hijriDayOffset) {
+                            Text("-2 days").tag(-2)
+                            Text("-1 day").tag(-1)
+                            Text("Standard (0)").tag(0)
+                            Text("+1 day").tag(1)
+                            Text("+2 days").tag(2)
+                        }
+                        .pickerStyle(.menu)
+                        .labelsHidden()
+                        .frame(width: 130)
+                    }
+
+                    Spacer(minLength: 0)
+                }
+
+                HStack(spacing: 14) {
                     // Compact shows neither the strip nor the launchpad, so
                     // the session override (⌘⇧C) hides these too.
                     if themeStore.effectiveLayout == .split {

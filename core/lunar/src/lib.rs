@@ -12,7 +12,7 @@
 use serde::{Deserialize, Serialize};
 use std::f64::consts::PI;
 
-/// A resolved lunar date.
+/// A resolved lunar date (East Asian lunisolar calendar).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LunarDate {
     pub day: i64,
@@ -20,6 +20,33 @@ pub struct LunarDate {
     pub year: i64,
     /// True when this is the intercalary (repeated) month of a 13-month year.
     pub leap: bool,
+}
+
+/// A resolved Islamic (Hijri) date.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HijriDate {
+    pub day: i64,
+    pub month: i64,
+    pub year: i64,
+}
+
+/// Converts a Gregorian date (year, month, day) to the Islamic (Hijri) calendar
+/// using standard tabular algorithmic calculation (astronomical civil epoch JD 1948440)
+/// with an optional day adjustment offset (-2..=+2 days) for local crescent sightings.
+pub fn solar_to_hijri(year: i64, month: i64, day: i64, offset_days: i64) -> HijriDate {
+    let jd = jd_from_date(day, month, year) + offset_days;
+    // Days since Islamic epoch (1 Muharram 1 AH = 16 July 622 CE, JD 1948440)
+    let days = jd - 1948440;
+    let h_year = (30 * days + 10646) / 10631;
+    let prior_days = days - (10631 * (h_year - 1) + 14) / 30;
+    let h_month = (prior_days * 2 + 59) / 59;
+    let h_month = h_month.clamp(1, 12);
+    let h_day = prior_days - ((h_month - 1) * 59 + 1) / 2 + 1;
+    HijriDate {
+        day: h_day.max(1),
+        month: h_month,
+        year: h_year,
+    }
 }
 
 /// Julian day number for a Gregorian date, switching to the Julian calendar
@@ -189,5 +216,27 @@ mod tests {
     fn carries_lunar_year() {
         let l = solar_to_lunar(2026, 2, 17, VN);
         assert_eq!(l.year, 2026);
+    }
+
+    #[test]
+    fn converts_hijri_dates() {
+        // 1 Ramadan 1445 AH = March 11, 2024 CE
+        let h1 = solar_to_hijri(2024, 3, 11, 0);
+        assert_eq!((h1.year, h1.month, h1.day), (1445, 9, 1));
+
+        // With +1 day offset
+        let h1_offset = solar_to_hijri(2024, 3, 11, 1);
+        assert_eq!(
+            (h1_offset.year, h1_offset.month, h1_offset.day),
+            (1445, 9, 2)
+        );
+
+        // 1 Shawwal 1445 AH (Eid al-Fitr) = April 10, 2024 CE
+        let h2 = solar_to_hijri(2024, 4, 10, 0);
+        assert_eq!((h2.year, h2.month, h2.day), (1445, 10, 1));
+
+        // 1 Muharram 1448 AH (Islamic New Year) = June 17, 2026 CE
+        let h3 = solar_to_hijri(2026, 6, 17, 0);
+        assert_eq!((h3.year, h3.month, h3.day), (1448, 1, 1));
     }
 }
