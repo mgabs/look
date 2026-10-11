@@ -461,6 +461,7 @@ jobs:
             echo "Tap is already current."
           else
             git commit -m "chore(release): update look/lgtm formula & cask to v${VERSION}"
+            git pull --rebase origin main || true
             git push origin HEAD
             echo "Successfully updated mgabs/homebrew-tap to v${VERSION}"
           fi
