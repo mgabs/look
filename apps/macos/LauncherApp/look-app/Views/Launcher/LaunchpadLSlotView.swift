@@ -232,12 +232,31 @@ private enum SecondaryCalendarResolver {
             guard let hijri = EngineBridge.shared.hijriDate(year: year, month: month, day: day, offsetDays: hijriOffset) else {
                 return nil
             }
-            let label = AppConstants.Launcher.Launchpad.hijriLabel
+            let monthName = hijriMonthName(hijri.month)
+            let dayMonth = "\(hijri.day) \(monthName)"
             return SecondaryCalendarBadgeData(
-                dayMonth: "\(hijri.day)/\(hijri.month)",
-                label: label,
-                inlineText: "\(hijri.day)/\(hijri.month) \(label)"
+                dayMonth: dayMonth,
+                label: AppConstants.Launcher.Launchpad.hijriLabel,
+                inlineText: "\(dayMonth) \(AppConstants.Launcher.Launchpad.hijriLabel)"
             )
+        }
+    }
+
+    private static func hijriMonthName(_ month: Int) -> String {
+        switch month {
+        case 1: return "Muharram"
+        case 2: return "Safar"
+        case 3: return "Rabi' I"
+        case 4: return "Rabi' II"
+        case 5: return "Jumada I"
+        case 6: return "Jumada II"
+        case 7: return "Rajab"
+        case 8: return "Sha'ban"
+        case 9: return "Ramadan"
+        case 10: return "Shawwal"
+        case 11: return "Dhu al-Qi'dah"
+        case 12: return "Dhu al-Hijjah"
+        default: return "\(month)"
         }
     }
 }
