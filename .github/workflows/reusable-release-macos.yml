@@ -40,6 +40,8 @@ on:
         required: false
       APPLE_NOTARY_TEAM_ID:
         required: false
+      HOMEBREW_TAP_TOKEN:
+        required: false
 
 jobs:
   build-release:
