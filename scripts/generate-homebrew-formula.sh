@@ -177,4 +177,9 @@ if [[ "$OUT_FILE" != "Formula/look.rb" && "$OUT_FILE" != "Formula/lgtm.rb" ]]; t
   cp "Formula/look.rb" "$OUT_FILE"
 fi
 
-echo "Generated Homebrew formulas: Formula/look.rb and Formula/lgtm.rb (version: ${VERSION})"
+# Generate Casks/look.rb
+mkdir -p Casks
+./scripts/generate-homebrew-cask.sh "$VERSION" "$REPO_SLUG" "$ARM64_SHA" "$INTEL_SHA" "Casks/look.rb"
+
+echo "Generated Homebrew formulas & cask: Formula/look.rb, Formula/lgtm.rb, Casks/look.rb (version: ${VERSION})"
+

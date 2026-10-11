@@ -38,6 +38,14 @@ Results land as fast as you can type. A Rust core under a native SwiftUI app on 
 
 ### macOS
 
+Install via Homebrew:
+
+```bash
+brew install --cask mgabs/tap/look
+```
+
+Or via the official cask:
+
 ```bash
 brew install --cask look
 ```

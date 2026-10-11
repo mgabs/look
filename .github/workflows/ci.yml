@@ -515,19 +515,22 @@ jobs:
             exit 0
           }
 
-          mkdir -p "$TAP_DIR/Formula"
+          mkdir -p "$TAP_DIR/Formula" "$TAP_DIR/Casks"
           cp Formula/look.rb "$TAP_DIR/Formula/look.rb"
           cp Formula/lgtm.rb "$TAP_DIR/Formula/lgtm.rb"
+          if [[ -f "Casks/look.rb" ]]; then
+            cp Casks/look.rb "$TAP_DIR/Casks/look.rb"
+          fi
 
           cd "$TAP_DIR"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add Formula/look.rb Formula/lgtm.rb
+          git add Formula/look.rb Formula/lgtm.rb Casks/look.rb
 
           if git diff --staged --quiet; then
-            echo "Homebrew tap formulas already up to date."
+            echo "Homebrew tap formulas and cask already up to date."
           else
-            git commit -m "chore(release): update look/lgtm formula to v${VERSION}"
+            git commit -m "chore(release): update look/lgtm formula & cask to v${VERSION}"
             git push origin HEAD
-            echo "Successfully updated mgabs/homebrew-tap formulas to v${VERSION}"
+            echo "Successfully updated mgabs/homebrew-tap formulas and cask to v${VERSION}"
           fi
