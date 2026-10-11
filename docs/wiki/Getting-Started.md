@@ -88,8 +88,4 @@ If building locally or installing an ad-hoc signed development build:
 ## Verifying Installation
 
 Launch Look by pressing `Cmd+Space`. You will see the Look launcher interface appear instantaneously in the center of the display.
-To verify CLI symlinks:
-
-```bash
-lookapp --version
-```
+CLI note: macOS ships /usr/bin/look, so the terminal command is lookapp (for example lookapp --toggle).

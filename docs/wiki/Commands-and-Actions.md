@@ -37,21 +37,18 @@ Press `Cmd+/` to enter the full-screen Command Mode catalog. You can also trigge
 * **Undo History**: 50-step in-memory undo/redo via `Cmd+Z` / `Cmd+Shift+Z`.
 
 #### ⚡ Speed Test (`:speed`)
-* **Live Visual Dial**: Real-time download/upload dials measuring from 1 Mbps up to 10 Gbps with latency jitter tracking.
+* **Live Visual Dial**: Real-time download/upload dials measuring from 1 Mbps to 1 Gbps with latency jitter tracking.
 * **Network Inspection**: Displays internal LAN IPv4, external WAN IP (click-to-copy or click-to-mask), and ISP identification.
 * **Engine**: Benchmarked against Cloudflare CDN edge nodes without external binary dependencies (`core/netspeed`).
 
-#### 🧮 Advanced Calculator & Converter (`:calc` or `=`)
-Look includes an integrated parsing engine (`core/calc` & `QuickMathService`):
-* **Math Expressions**: Factorials (`5!`), powers (`2^8`), trigonometric functions, logarithms, brackets (`(4 + 8) * 2`).
-* **Unit Conversions**: Automatically converts between metric and imperial systems:
-  - *Distance*: `100 km in mi`, `50 miles to km`
-  - *Temperature*: `100 c in f`, `72 f to c`
-  - *Weight*: `5 kg in lbs`, `150 lbs to kg`
-* **Currency Conversion**: Live and cached fiat conversion (e.g. `100 usd in eur`, `50 gbp to jpy`).
-* **Timestamp Inspector**: Convert Unix timestamps directly to human readable dates:
-  - Input: `1700000000` -> Output: `Wed, 15 Nov 2023 22:13:20 UTC`
-  - Input: `now timestamp` -> Output: Current epoch timestamp.
+#### 🧮 Calculator & Converter (`:calc`, or just type an expression)
+Backed by `core/calc` and the macOS `QuickMathService`:
+* **Math**: `2+2`, `sqrt(16)`, `200*15%`, `2^8`, `5!`, constants `pi` / `e`. A pinned Calculator row appears; `Enter` copies the value.
+* **Unit conversion**: `<amount> <unit> (to|in|->|=) <unit>`. Includes digital units (b, KB, MB, GB, TB, PB).
+* **Currency conversion**: same pattern with currency codes.
+* **Timestamps**: `timestamp` / `timestamp now`, or `timestamp <epoch>`, converts to a readable date.
+
+> Exact unit and currency coverage lives in `QuickMathService.swift`; check it for the full list.
 
 #### 🛑 Process & Port Killer (`:kill` / `ps"`)
 * **Kill by Name**: Fuzzy search across running processes and terminate with confirmation.

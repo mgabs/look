@@ -37,21 +37,12 @@ The lower half of the empty-state window renders a grid of status and control ti
 
 ---
 
-## 3. Customizing the Grid Layout (`~/.look/super-actions.toml`)
+## 3. Enabling and Customizing
 
-Look layouts are completely user-customizable. Edit `~/.look/super-actions.toml`:
-
-```toml
-# Layout grid definition
-# Repeating a name makes that tile span multiple columns/rows.
-# Use '.' for an empty blank cell.
-
-grid = """
-lslot   lslot   wifi    bluetooth  battery   theme
-lslot   lslot   weather weather    keepawake screensaver
-restart shutdown mic     nowplaying nowplaying .
-"""
-```
-
-### Safety & Fallback
-If `~/.look/super-actions.toml` has syntax errors or an invalid tile specification, Look automatically falls back to its built-in default layout without crashing or failing to launch.
+- **Off by default.** Enable in `Settings > Appearance > Super Actions` (`super_actions_enabled` in `~/.look/config`).
+- Layout lives in `~/.look/super-actions.toml`: a drawing of the grid where each line is a row and each name a cell. Repeat a name to span cells, use `.` for a gap, delete a name to hide a tile. Max 5 rows x 6 columns.
+- Minimum sizes: L slot 2x2, weather 1x2, now playing 2x1; undersized tiles are dropped.
+- Seeded with the default layout on first run; delete the file to reset.
+- A bad tile is dropped and the rest renders; a structural error falls back to the default layout.
+- Restart and Shut Down arm on first press and fire on the second.
+- Modifier: `Cmd` (macOS) / `Alt` (Linux, Windows).

@@ -1,69 +1,39 @@
 # Configuration Reference
 
-Look is configured via a plain-text configuration file located at:
+Config file: **`~/.look/config`** (legacy `~/.look.config` is still read). Override the path with `LOOK_CONFIG_PATH`.
 
-* **Default Path**: `~/.look.config` (or `~/.look/config`)
-* **Environment Override**: `LOOK_CONFIG_PATH=/path/to/custom.config`
-* **Live Reload Shortcut**: `Cmd+Shift+;` (reloads settings instantly without restarting the application)
+- One `key=value` per line; `#` starts a comment.
+- Out-of-range or unparseable values fall back to defaults.
+- Reload with `Cmd+Shift+;` (macOS) or `Ctrl+Shift+;` (Linux/Windows), or restart Look.
 
----
+Full reference: [`docs/user-guide.md`](https://github.com/mgabs/look/blob/main/docs/user-guide.md).
 
-## Configuration Syntax
+## Indexing
 
-* One `key = value` assignment per line.
-* Lines beginning with `#` are comments.
-* Missing keys automatically fall back to hardcoded defaults.
+- `app_scan_roots`, `app_scan_depth`, `app_exclude_paths`, `app_exclude_names`
+- `file_scan_roots`, `file_scan_extra_roots`, `file_scan_depth`, `file_scan_limit`, `file_exclude_paths`
+- `ignored_patterns_<group>`: gitignore-style globs (`*`, `**`, `?`, `[abc]`), values separated by `|`, files only
+- `lazy_indexing_enabled`
+- `skip_dir_names`
+- `alias_<keyword>`: app / System Settings aliases, e.g. `alias_note=Notion|Obsidian|Notes`
 
----
+## Calendar (macOS clock tile)
 
-## File & Application Indexing
+- `secondary_calendar`: `none`, `lunar` (East Asian) or `hijri` (Islamic)
+- `hijri_day_offset`: integer day offset to match local moon sighting (default `0`)
 
-| Key | Default | Description |
-| :--- | :--- | :--- |
-| `app_scan_roots` | `/Applications, ~/Applications, /System/Applications` | Comma-separated paths scanned for application bundles |
-| `app_scan_depth` | `3` | Maximum folder recursion depth when finding apps |
-| `app_exclude_paths` | `""` | Paths excluded from app discovery |
-| `app_exclude_names` | `""` | App bundle names hidden from search results |
-| `file_scan_roots` | `~/Desktop, ~/Documents, ~/Downloads` | Search roots for document and file indexing |
-| `file_scan_depth` | `4` | Maximum recursion depth for file search |
-| `file_scan_limit` | `25000` | Maximum number of files indexed in SQLite |
-| `file_exclude_paths`| `""` | Directories completely skipped by the scanner |
-| `skip_dir_names` | `node_modules, .git, target, .build, Pods` | Directory basenames ignored during indexing |
+## Behaviour (file-only settings)
 
----
+- `launcher_hotkey`: global show/hide shortcut. Default `cmd+space` (macOS), `alt+space` (Windows/Linux). Examples: `ctrl+space`, `alt+shift+space`, `f13`. `none` disables registration (bind `lookapp --toggle` yourself).
+- `shortcut_<group>_<action>` (macOS): rebind in-app shortcuts, e.g. `shortcut_main_copy`. Multiple chords separated by `|`.
+- `app_hotkey_<name>=<shortcut>|<target>`: global shortcut launching an app, e.g. `app_hotkey_terminal=cmd+shift+t|Ghostty`.
+- `clipboard_history_limit`: 10 to 100, default `10`.
+- `query_retention_seconds`: how long the query survives while hidden. Default `5`; `0` clears on every hide; negative keeps it.
+- `translate_languages`: codes for the `t"` panel, default `vi,en,ja`.
+- `text_editor`, `code_editor`, `terminal`, `file_manager`: preferred tools.
 
-## Calendar & Date Options
+## System
 
-| Key | Default | Description |
-| :--- | :--- | :--- |
-| `secondary_calendar_type` | `none` | Optional secondary calendar: `none`, `hijri`, or `lunar` |
-| `secondary_calendar_offset` | `0` | Integer day offset (e.g. `-1`, `0`, `1`) to adjust Hijri moon sighting |
-
-When enabled, the launcher displays the secondary date (e.g. Islamic Hijri month name and day number, or Lunar phase) alongside the standard Gregorian date in the launcher header.
-
----
-
-## User Interface & Appearance
-
-| Key | Default | Description |
-| :--- | :--- | :--- |
-| `ui_tint_red` | `0.1` | Window background tint red channel (0.0 to 1.0) |
-| `ui_tint_green` | `0.1` | Window background tint green channel (0.0 to 1.0) |
-| `ui_tint_blue` | `0.1` | Window background tint blue channel (0.0 to 1.0) |
-| `ui_tint_opacity` | `0.85` | Background translucency opacity |
-| `ui_blur_material` | `hudWindow` | macOS blur material style (`hudWindow`, `menu`, `popover`) |
-| `ui_font_name` | `system` | Custom font family name for UI typography |
-| `ui_font_size` | `15` | Base font size for candidate rows |
-| `ui_border_thickness` | `1.0` | Outer window border stroke width in pixels |
-| `running_apps_placement` | `right` | Running apps bar: `right`, `none` |
-
----
-
-## System & Diagnostics
-
-| Key | Default | Description |
-| :--- | :--- | :--- |
-| `backend_log_level` | `info` | Logging verbosity: `trace`, `debug`, `info`, `warn`, `error` |
-| `launch_at_login` | `false` | Automatically launch Look on macOS user login |
-| `ai_enabled` | `true` | Toggle web answer cards and suggestions globally |
-| `translate_allow_network` | `true` | Allow external network calls for language translation |
+- `backend_log_level`, `launch_at_login`, `add_to_path` (Windows)
+- `ai_enabled`: toggles web answer cards and suggestions (on by default)
+- `running_apps_placement`: `none` = off, any other value = on
