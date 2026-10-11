@@ -1,31 +1,20 @@
 # Backend Contributor Guide
 
-Detailed contributor guide:
+See the full **[Developer & Contributor Guide](Developer-and-Contributor-Guide.md)** for complete build and testing workflows.
 
-- `docs/backend-guide.md`
+## Edit Map
 
-## Edit map
-
-- query parsing: `core/engine/src/query.rs`
-- scoring/ranking: `core/engine/src/scoring.rs`, `core/engine/src/config.rs`
-- search orchestration: `core/engine/src/search.rs`
-- indexing logic: `core/engine/src/index/*`
-- persistence/migrations: `core/storage/src/lib.rs`
-- FFI endpoints: `bridge/ffi/src/*_api.rs`
+* **Query parsing**: `core/engine/src/query.rs`
+* **Scoring & Ranking**: `core/engine/src/scoring.rs`, `core/engine/src/config.rs`
+* **Search orchestration**: `core/engine/src/search.rs`
+* **Filesystem indexing**: `core/engine/src/index/*`
+* **Persistence & Migrations**: `core/storage/src/lib.rs`
+* **C FFI endpoints**: `bridge/ffi/src/*_api.rs`
 
 ## Verification
 
 ```bash
-cd core && cargo check --workspace
-cd ../bridge/ffi && cargo check
+make core-check
+make ffi-check
 cargo test --workspace --manifest-path core/Cargo.toml
-cargo test --manifest-path bridge/ffi/Cargo.toml
-make app-run
 ```
-
-## Rules of thumb
-
-- keep tunables centralized in config
-- keep query-time work bounded
-- keep FFI payloads stable and typed
-- keep indexing-source logic isolated under `index/*`

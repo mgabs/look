@@ -1,62 +1,63 @@
-# User Workflow and Shortcuts
+# User Workflow & Shortcuts
 
-## Typical workflow
+## Daily Workflow
 
-1. Press `Cmd+Space` to open launcher.
-2. Type to search apps, files, folders, or settings.
-3. Use `Tab`/`Shift+Tab` or arrow keys to navigate.
-4. Press `Enter` to open or execute.
+1. **Activate**: Press `Cmd+Space` anywhere to summon the launcher.
+2. **Search**: Start typing to instantly filter across installed applications, recent files, indexed folders, clipboard clips, and custom sources.
+3. **Navigate**: Use `Up` / `Down` arrows or `Tab` / `Shift+Tab` to cycle candidates.
+4. **Action**: Press `Enter` to open or execute, `Cmd+Enter` to launch a web query, or `Cmd+F` to reveal the target in Finder.
+5. **Dismiss**: Tap `Esc` or `Shift+Esc` to hide the panel and return to your previous app.
 
-## Important shortcuts
+---
 
-- `Enter`: open selected result / execute command
-- `Tab` / `Shift+Tab`: next/previous result or path autocomplete drill-down
-- `Up` / `Down`: selection movement
-- `Cmd+/`: enter command mode
-- `Escape`: back/close (context aware)
-- `Shift+Escape`: hide launcher
-- `Cmd+Enter`: web search
-- `Cmd+F`: reveal in Finder
-- `Cmd+C`: copy selected file/folder
-- `Cmd+Shift+,`: open/close settings panel
-- `Cmd+Shift+;`: reload config
-- `Cmd+-`, `Cmd+=`, `Cmd+0`: temporary zoom controls
+## Keyboard Shortcuts Cheat Sheet
 
-## Quick system commands
+| Shortcut | Context | Action |
+| :--- | :--- | :--- |
+| `Cmd+Space` | Global | Show / hide Look launcher window |
+| `Enter` | Search Results | Launch selected application or open file |
+| `Cmd+Enter` | Search Results | Trigger external web search for the query |
+| `Cmd+F` | File / Folder | Reveal selected item in Finder |
+| `Cmd+C` | File / Folder | Copy path to system clipboard |
+| `Cmd+D` | File / Folder | Move selected file/folder to Trash (recoverable) |
+| `Cmd+P` | File / Folder | Toggle item in multi-pick selection basket |
+| `Cmd+Shift+P` | File / Folder | Clear all multi-picked items |
+| `Cmd+I` | Clipboard row | Paste clip directly into previously active window |
+| `Cmd+/` | Main Bar | Enter Command Mode catalog |
+| `Cmd+Shift+,` | Any | Open / close Settings panel |
+| `Cmd+Shift+;` | Any | Reload `~/.look.config` runtime configuration |
+| `Cmd+-` / `Cmd+=` | Any | Adjust launcher UI zoom scale |
+| `Cmd+0` | Any | Reset launcher UI zoom scale to 100% |
 
-Type `:` prefixed commands in the launcher:
+---
 
-- `:sleep` puts display/system to sleep
-- `:lock` locks the screen immediately
-- `:mute` toggles system audio mute
-- `:theme` toggles system Dark/Light appearance
-- `:caff` toggles caffeinate keep-awake state
+## Query Modes & Prefixes
 
-## Path navigation & fuzzy file jump
+Type a prefix at the very beginning of the query to restrict or change the search mode:
 
-- Type `/` or `~` to trigger file-system navigation mode
-- Use `Tab` to complete and drill down into subdirectories
-- Matches fuzzy file names dynamically
+| Prefix | Mode | Description |
+| :--- | :--- | :--- |
+| *(None)* | **Unified Search** | Searches apps, files, bookmarks, commands, and math expressions |
+| `a"` | **Applications** | Restricts candidates strictly to `.app` bundles |
+| `f"` | **Files** | Restricts search to user documents and files |
+| `d"` | **Directories** | Restricts search to folders |
+| `r"` | **Regex** | Regular expression search across indexed paths |
+| `rc"` | **Recent Files** | Shows recently modified or opened disk assets |
+| `c"` | **Clipboard History** | Fuzzy search (`fzf` scoring) over recent clipboard text entries |
+| `ci"` | **Clipboard Images** | Visual thumbnail gallery of recent screenshot/image copies |
+| `t"` | **Translate** | Quick multi-language text translation |
+| `tw"` | **Dictionary** | Quick word definition and synonym lookup |
+| `ps"` | **Process Manager** | Search running processes by name or listening port (e.g. `ps"3000`) |
+| `/` or `~` | **Path Navigation** | Direct file system exploration with `Tab` folder completion |
+| `>` | **AI Assistant** | Natural-language conversations, meeting joins, and actions |
 
-## Command mode
+---
 
-Enter with `Cmd+/`.
+## Path Navigation & Fuzzy File Jumping
 
-Built-ins:
+Look includes a filesystem navigation mode:
 
-- `calc`
-- `shell`
-- `kill`
-- `sys`
-
-Notes:
-
-- `shell` input containing `sudo` shows an orange warning cue
-- `kill` flow requires explicit confirmation
-
-## Clipboard mode
-
-- prefix: `c"`
-- fuzzy matching across clipboard items
-- `Enter` on clipboard row copies content back to clipboard
-- session-scoped in-memory history
+1. **Activate**: Begin your query with `/` (absolute root path) or `~` (home directory).
+2. **Tab Drill-Down**: Press `Tab` when highlighted on a folder to drill down into its subdirectories.
+3. **Fuzzy Jumping**: Type partial path components (e.g. `/u/l/b` jumps to `/usr/local/bin`).
+4. **Execution**: Press `Enter` to open the file in its default editor or open the directory in Terminal/Finder.

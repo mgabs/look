@@ -1,53 +1,95 @@
 # Getting Started
 
-## Requirements
+## System Requirements
 
-- macOS 15.0+ (Sequoia recommended)
+* **macOS**: 15.0+ (macOS Sequoia recommended for full Apple Intelligence & Spotlight integration).
+* **Linux**: System with GTK3/WebKit2GTK, GNOME / KDE Wayland or X11 (via `apps/linows`).
+* **Windows**: Windows 10/11 x64 (via `apps/linows`).
 
-## Install
+---
 
-### Homebrew Tap
+## Installation
+
+### macOS (Recommended: Homebrew Tap)
+
+Install via the maintained Homebrew tap:
 
 ```bash
 brew install --cask mgabs/tap/look
 ```
 
-Or via direct tap:
+Or tap first, then install:
 
 ```bash
 brew tap mgabs/tap
 brew install --cask look
 ```
 
-### Spotlight Shortcut Configuration
+### Direct Download & Installation Script
 
-If `Cmd+Space` is still opening Spotlight, rebind or disable the Spotlight shortcut:
+Run the automated installer:
 
-- `System Settings` -> `Keyboard` -> `Keyboard Shortcuts...` -> `Spotlight`
+```bash
+curl -fsSL https://raw.githubusercontent.com/mgabs/look/main/scripts/install-look.sh | bash
+```
 
-## First launch notes
+To pin a specific version or install a custom asset:
 
-If app is unsigned/not notarized, macOS may block first run:
+```bash
+curl -fsSL https://raw.githubusercontent.com/mgabs/look/main/scripts/install-look.sh | bash -s -- --version 0.8.0
+```
 
-- right-click `Look.app` -> `Open` -> confirm, or
-- `System Settings` -> `Privacy & Security` -> `Open Anyway`
+### Linux
 
-## Basic usage
+Using the automated install script:
 
-- open launcher with `Cmd+Space`
-- type query and press `Enter` to open selection
-- `Cmd+F` reveal selected item in Finder
-- `Cmd+Enter` web search current query
+```bash
+curl -fsSL https://raw.githubusercontent.com/mgabs/look/main/scripts/linux/install-look.sh | bash
+```
 
-## Query prefixes & modes
+Or install the `.deb` release package manually:
 
-- `a"term` apps only
-- `f"term` files only
-- `d"term` folders only
-- `r"pattern` regex mode
-- `c"term` clipboard history mode (fuzzy search enabled)
-- `t"text` translate panel
-- `tw"text` dictionary lookup panel
-- `/path` or `~/path` direct path navigation with Tab completion & fuzzy file jump
-- `=expression` or math queries (e.g. `24 * 7`, `100 usd in eur`, `1700000000 timestamp`)
-- `:sleep`, `:lock`, `:mute`, `:theme`, `:caff` quick system control commands
+```bash
+sudo dpkg -i Look_*.deb
+```
+
+### Windows
+
+Install via PowerShell:
+
+```powershell
+iex "& { $(irm https://raw.githubusercontent.com/mgabs/look/main/scripts/windows/install-look.ps1) }"
+```
+
+---
+
+## First-Run Setup & Permissions (macOS)
+
+### 1. Unbind Default Spotlight Hotkey
+Look uses `Cmd+Space` by default. To prevent macOS Spotlight from intercepting the hotkey:
+1. Open **System Settings** -> **Keyboard** -> **Keyboard Shortcuts...**.
+2. Select **Spotlight** in the left sidebar.
+3. Uncheck **Show Spotlight search** (or assign it to another key chord like `Ctrl+Space`).
+
+### 2. Privacy & Security Permissions
+Look requires specific macOS permissions for system-level controls:
+* **Accessibility**: Required to read active window titles and simulate keystrokes for clipboard pasting (`Cmd+I`).
+  - *Location*: System Settings -> Privacy & Security -> Accessibility -> Enable **Look**.
+* **Automation (System Events)**: Required for system sleep, mute, and appearance toggles.
+* **Calendars & Contacts** *(Optional)*: Required for calendar event previews, meeting join shortcuts, and contact communications.
+
+### 3. Gatekeeper Bypass
+If building locally or installing an ad-hoc signed development build:
+* Right-click `Look.app` in `/Applications` -> Select **Open** -> Click **Open** in the confirmation dialog.
+* Or allow via System Settings -> Privacy & Security -> **Open Anyway**.
+
+---
+
+## Verifying Installation
+
+Launch Look by pressing `Cmd+Space`. You will see the Look launcher interface appear instantaneously in the center of the display.
+To verify CLI symlinks:
+
+```bash
+lookapp --version
+```
