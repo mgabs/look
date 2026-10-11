@@ -1,0 +1,60 @@
+name: Sync GitHub Wiki
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/wiki/**"
+      - ".github/workflows/wiki-sync.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-wiki:
+    name: Sync docs/wiki to GitHub Wiki
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Push to GitHub Wiki
+        env:
+          WIKI_TOKEN: ${{ secrets.GH_PAT || secrets.HOMEBREW_TAP_TOKEN || secrets.FLAKE_UPDATE_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          if [[ -z "$WIKI_TOKEN" ]]; then
+            echo "::warning::No wiki token configured. Skipping wiki push."
+            exit 0
+          fi
+
+          WIKI_DIR="$RUNNER_TEMP/github-wiki"
+          rm -rf "$WIKI_DIR"
+
+          WIKI_REPO="https://x-access-token:${WIKI_TOKEN}@github.com/${{ github.repository }}.wiki.git"
+
+          echo "Cloning GitHub wiki repository..."
+          if ! git clone "$WIKI_REPO" "$WIKI_DIR" 2>/dev/null; then
+            echo "::warning::Could not clone ${{ github.repository }}.wiki.git. Ensure Wiki is initialized in repo settings and token has write permissions."
+            exit 0
+          fi
+
+          mkdir -p docs/wiki
+          cp -R docs/wiki/* "$WIKI_DIR/"
+
+          cd "$WIKI_DIR"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+
+          if git diff --staged --quiet; then
+            echo "Wiki is already up to date."
+          else
+            git commit -m "docs(wiki): sync wiki docs from main [skip ci]"
+            git push origin HEAD
+            echo "Successfully updated GitHub wiki."
+          fi
