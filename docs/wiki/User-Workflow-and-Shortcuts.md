@@ -17,7 +17,10 @@
 | `Cmd+Space` | Global | Show / hide Look launcher window |
 | `Enter` | Search Results | Launch selected application or open file |
 | `Cmd+Enter` | Search Results | Trigger external web search for the query |
-| `Cmd+F` | File / Folder | Reveal selected item in Finder |
+| `Cmd+F` | File / Folder | Reveal selected item in Finder / file manager |
+| `Cmd+K` | File / Folder / App | Open action menu |
+| `Cmd+E` | File / Folder | Edit with preferred text/code editor |
+| `Cmd+T` | File / Folder | Open terminal here |
 | `Cmd+C` | File / Folder | Copy path to system clipboard |
 | `Cmd+D` | File / Folder | Move selected file/folder to Trash (recoverable) |
 | `Cmd+P` | File / Folder | Toggle item in multi-pick selection basket |
@@ -25,7 +28,7 @@
 | `Cmd+I` | Clipboard row | Paste clip directly into previously active window |
 | `Cmd+/` | Main Bar | Enter Command Mode catalog |
 | `Cmd+Shift+,` | Any | Open / close Settings panel |
-| `Cmd+Shift+;` | Any | Reload `~/.look.config` runtime configuration |
+| `Cmd+Shift+;` | Any | Reload `~/.look/config` runtime configuration |
 | `Cmd+-` / `Cmd+=` | Any | Adjust launcher UI zoom scale |
 | `Cmd+0` | Any | Reset launcher UI zoom scale to 100% |
 

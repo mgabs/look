@@ -15,7 +15,7 @@ To disable all external network lookups and AI suggestions, set:
 ```ini
 ai_enabled = false
 ```
-in `~/.look.config`.
+in `~/.look/config`.
 
 ---
 

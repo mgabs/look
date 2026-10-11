@@ -30,13 +30,13 @@ brew install --cask look
 Run the automated installer:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mgabs/look/main/scripts/install-look.sh | bash
+curl -fsSL https://raw.githubusercontent.com/mgabs/look/main/scripts/install-look.sh | bash -s -- --repo mgabs/look
 ```
 
-To pin a specific version or install a custom asset:
+To pin a specific version:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mgabs/look/main/scripts/install-look.sh | bash -s -- --version 0.8.0
+curl -fsSL https://raw.githubusercontent.com/mgabs/look/main/scripts/install-look.sh | bash -s -- --repo mgabs/look --version 0.8.0
 ```
 
 ### Linux
@@ -44,10 +44,10 @@ curl -fsSL https://raw.githubusercontent.com/mgabs/look/main/scripts/install-loo
 Using the automated install script:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mgabs/look/main/scripts/linux/install-look.sh | bash
+curl -fsSL https://raw.githubusercontent.com/mgabs/look/main/scripts/linux/install-look.sh | bash -s -- --repo mgabs/look
 ```
 
-Or install the `.deb` release package manually:
+Or install the `.deb` release package manually (`Look_<version>_amd64.deb` from GitHub releases):
 
 ```bash
 sudo dpkg -i Look_*.deb
@@ -58,7 +58,7 @@ sudo dpkg -i Look_*.deb
 Install via PowerShell:
 
 ```powershell
-iex "& { $(irm https://raw.githubusercontent.com/mgabs/look/main/scripts/windows/install-look.ps1) }"
+iex "& { $(irm https://raw.githubusercontent.com/mgabs/look/main/scripts/windows/install-look.ps1) } -Repo mgabs/look"
 ```
 
 ---
