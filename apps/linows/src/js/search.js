@@ -159,7 +159,7 @@ export function handleQueryInput(query) {
     }
     lastQueryString = query;
 
-    // Discovery menus - `"` lists every query prefix, `:` lists every slash
+    // Discovery menus - `"` lists every query prefix, `\` lists every slash
     // command, both filterable by what follows the leading character. Must
     // run before the t"/c"/rc" branches because the leading chars overlap.
     if (isPrefixSuggestionQuery(query)) {

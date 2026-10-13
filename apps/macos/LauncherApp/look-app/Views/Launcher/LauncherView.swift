@@ -436,7 +436,7 @@ struct LauncherView: View {
     }
 
     var isPathQuery: Bool {
-        !isCommandMode && extractInlineCommand(from: query) == nil && PathNavigationService.isPathQuery(query)
+        !isCommandMode && PathNavigationService.isPathQuery(query)
     }
 
     var pathResults: [LauncherResult] {
@@ -478,23 +478,23 @@ struct LauncherView: View {
         }
     }
 
-    /// A leading `:` opens the command-discovery menu: every command with its
-    /// description. Typing after the `:` (e.g. `:process`) filters by id and
-    /// description; picking one enters that command. A `:<exact-id> <args>`
-    /// live-trigger (e.g. `:calc 2+2`) jumps straight into the command instead
+    /// A leading `\` opens the command-discovery menu: every command with its
+    /// description. Typing after the `\` (e.g. `\process`) filters by id and
+    /// description; picking one enters that command. A `\<exact-id> <args>`
+    /// live-trigger (e.g. `\calc 2+2`) jumps straight into the command instead
     /// (handled in `onChange(of: query)`), so it isn't a discovery query.
     var isCommandSuggestionQuery: Bool {
         guard !isCommandMode else { return false }
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard trimmed.hasPrefix(":") else { return false }
+        guard trimmed.hasPrefix("\\") else { return false }
         if let cmd = extractInlineCommand(from: query), cmd.hasSpace { return false }
         return true
     }
 
-    /// The text typed after the leading `:`, used to filter the command menu.
+    /// The text typed after the leading `\`, used to filter the command menu.
     var commandSuggestionFilter: String {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard trimmed.hasPrefix(":") else { return "" }
+        guard trimmed.hasPrefix("\\") else { return "" }
         return String(trimmed.dropFirst())
     }
 

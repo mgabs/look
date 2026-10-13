@@ -15,7 +15,7 @@ import {
 test('isSyntheticResultId flags every synthetic row id', () => {
     const synthetic = [
         ...prefixSuggestionResults(''),
-        ...commandSuggestionResults(':'),
+        ...commandSuggestionResults('\\'),
         ...webSuggestionResults(['weather today']),
         webUrlResult('https://example.com', 'Open in browser', 1),
     ];
@@ -32,12 +32,12 @@ test('isSyntheticResultId passes real apps and bad input', () => {
     assert.equal(isSyntheticResultId(''), false);
 });
 
-test('isPrefixedQuery identifies : and / inline commands with args', () => {
-    assert.equal(isPrefixedQuery(':calc 2+2'), true);
-    assert.equal(isPrefixedQuery('/calc 2+2'), true);
-    assert.equal(isPrefixedQuery(':kill 1234'), true);
-    assert.equal(isPrefixedQuery('/kill 1234'), true);
-    assert.equal(isPrefixedQuery('/notacommand 123'), false);
+test('isPrefixedQuery identifies \\ command queries and rejects : and /', () => {
+    assert.equal(isPrefixedQuery('\\calc 2+2'), true);
+    assert.equal(isPrefixedQuery('\\kill 1234'), true);
+    assert.equal(isPrefixedQuery('\\'), true);
+    assert.equal(isPrefixedQuery(':calc 2+2'), false);
+    assert.equal(isPrefixedQuery('/calc 2+2'), false);
     assert.equal(isPrefixedQuery('/usr/bin/local'), false);
     assert.equal(isPrefixedQuery('/home/user'), false);
 });
