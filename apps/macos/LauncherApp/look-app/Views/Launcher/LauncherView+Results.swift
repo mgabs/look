@@ -33,6 +33,9 @@ extension LauncherView {
             return
         case .commandSuggestion(let commandID):
             switch commandID {
+            case AppConstants.Launcher.Command.calc:
+                query = "/calc "
+                isQueryFocused = true
             case AppConstants.Launcher.Command.sleep,
                  AppConstants.Launcher.Command.lock,
                  AppConstants.Launcher.Command.mute:

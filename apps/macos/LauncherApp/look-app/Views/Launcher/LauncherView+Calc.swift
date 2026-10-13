@@ -8,8 +8,23 @@ extension LauncherView {
     /// A synthesized row for the current query's arithmetic, unit conversion,
     /// currency, or timestamp answer. Network-free & fast.
     var calcResult: LauncherResult? {
-        guard allowsSuggestionRows, let calc = QuickMathService.evaluate(query, bridge: bridge) else { return nil }
-        let expr = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard allowsSuggestionRows else { return nil }
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let evalQuery: String
+        let calcExpr: String
+
+        if trimmed.lowercased().hasPrefix("/calc ") {
+            let expr = String(trimmed.dropFirst(6)).trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !expr.isEmpty else { return nil }
+            // Prefix with ? to trigger direct math evaluation in QuickMathService
+            evalQuery = "?\(expr)"
+            calcExpr = expr
+        } else {
+            evalQuery = query
+            calcExpr = trimmed
+        }
+
+        guard let calc = QuickMathService.evaluate(evalQuery, bridge: bridge) else { return nil }
 
         var result = LauncherResult(
             id: "\(AppConstants.Launcher.Calc.resultIDPrefix)\(calc.raw)",
@@ -19,7 +34,7 @@ extension LauncherView {
             path: calc.raw,
             score: .max
         )
-        result.calcExpression = expr
+        result.calcExpression = calcExpr
         result.calcRawValue = calc.raw
         return result
     }
