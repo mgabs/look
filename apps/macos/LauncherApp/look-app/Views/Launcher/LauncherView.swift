@@ -488,7 +488,15 @@ struct LauncherView: View {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard trimmed.hasPrefix("/") else { return false }
         if let cmd = extractInlineCommand(from: query), cmd.hasSpace { return false }
-        return true
+        let filter = commandSuggestionFilter
+        // A single "/" opens the full command catalog.
+        if filter.isEmpty { return true }
+        // If query has multiple slashes (e.g. "/Applications/"), it's a directory path, not a command.
+        if filter.contains("/") { return false }
+        // If valid path results exist for this query, let path navigation take precedence over command discovery.
+        if !pathResults.isEmpty { return false }
+        // Otherwise, only treat as command suggestion if it matches catalog commands.
+        return !AppConstants.Launcher.commandCatalog(matching: filter).isEmpty
     }
 
     /// The text typed after the leading `/`, used to filter the command menu.
