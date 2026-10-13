@@ -802,7 +802,7 @@ function writeLunar() {
         return;
     }
     slotEls.time.textContent = `${lunarToday.day}/${lunarToday.month}`;
-    slotEls.date.textContent = lunarToday.leap ? 'Lunar leap' : 'Lunar';
+    slotEls.date.textContent = `${lunarToday.year} ${lunarToday.leap ? 'Lunar leap' : 'Lunar'}`;
 }
 
 async function refreshTodo() {
@@ -977,7 +977,7 @@ function updateHeaderClock() {
 function writeLunarLine() {
     if (!slotEls?.lunarLine) return;
     slotEls.lunarLine.textContent = lunarToday
-        ? `${lunarToday.day}/${lunarToday.month} ${lunarToday.leap ? 'Lunar leap' : 'Lunar'}`
+        ? `${lunarToday.day}/${lunarToday.month}/${lunarToday.year} ${lunarToday.leap ? 'Lunar leap' : 'Lunar'}`
         : '';
 }
 

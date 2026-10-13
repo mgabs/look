@@ -199,6 +199,7 @@ private struct LaunchpadClockTile: View {
 /// Data model representing a secondary calendar readout.
 private struct SecondaryCalendarBadgeData: Equatable {
     let dayMonth: String
+    let year: String
     let label: String
     let inlineText: String
 }
@@ -225,8 +226,9 @@ private enum SecondaryCalendarResolver {
                 : AppConstants.Launcher.Launchpad.lunarLabel
             return SecondaryCalendarBadgeData(
                 dayMonth: "\(lunar.day)/\(lunar.month)",
+                year: "\(lunar.year)",
                 label: label,
-                inlineText: "\(lunar.day)/\(lunar.month) \(label)"
+                inlineText: "\(lunar.day)/\(lunar.month)/\(lunar.year) \(label)"
             )
         case .hijri:
             guard let hijri = EngineBridge.shared.hijriDate(year: year, month: month, day: day, offsetDays: hijriOffset) else {
@@ -236,8 +238,9 @@ private enum SecondaryCalendarResolver {
             let dayMonth = "\(hijri.day) \(monthName)"
             return SecondaryCalendarBadgeData(
                 dayMonth: dayMonth,
+                year: "\(hijri.year) AH",
                 label: AppConstants.Launcher.Launchpad.hijriLabel,
-                inlineText: "\(dayMonth) \(AppConstants.Launcher.Launchpad.hijriLabel)"
+                inlineText: "\(dayMonth) \(hijri.year) AH"
             )
         }
     }
@@ -274,9 +277,10 @@ private struct SecondaryCalendarBadge: View {
                 .font(themeStore.uiFont(size: Const.captionFontSize + 5, weight: .semibold))
                 .foregroundColor(themeStore.secondaryTextColor())
                 .monospacedDigit()
-            Text(badge.label)
+            Text(badge.year)
                 .font(themeStore.uiFont(size: Const.captionFontSize - 1))
                 .foregroundColor(themeStore.mutedTextColor())
+                .monospacedDigit()
         }
     }
 }
