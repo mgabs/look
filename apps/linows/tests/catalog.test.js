@@ -6,6 +6,8 @@ import {
     commandSuggestionResults,
     webSuggestionResults,
     webUrlResult,
+    isPrefixedQuery,
+    isCommandId,
 } from '../src/js/catalog.js';
 
 // Guards the Ctrl+Shift+H hide-app path: every synthetic kind:'app' row must be
@@ -29,3 +31,14 @@ test('isSyntheticResultId passes real apps and bad input', () => {
     assert.equal(isSyntheticResultId(undefined), false);
     assert.equal(isSyntheticResultId(''), false);
 });
+
+test('isPrefixedQuery identifies : and / inline commands with args', () => {
+    assert.equal(isPrefixedQuery(':calc 2+2'), true);
+    assert.equal(isPrefixedQuery('/calc 2+2'), true);
+    assert.equal(isPrefixedQuery(':kill 1234'), true);
+    assert.equal(isPrefixedQuery('/kill 1234'), true);
+    assert.equal(isPrefixedQuery('/notacommand 123'), false);
+    assert.equal(isPrefixedQuery('/usr/bin/local'), false);
+    assert.equal(isPrefixedQuery('/home/user'), false);
+});
+

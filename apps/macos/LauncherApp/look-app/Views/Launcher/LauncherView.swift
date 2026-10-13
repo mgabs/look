@@ -436,7 +436,7 @@ struct LauncherView: View {
     }
 
     var isPathQuery: Bool {
-        !isCommandMode && PathNavigationService.isPathQuery(query)
+        !isCommandMode && extractInlineCommand(from: query) == nil && PathNavigationService.isPathQuery(query)
     }
 
     var pathResults: [LauncherResult] {

@@ -37,7 +37,7 @@ import * as levels from './levels.js';
 import * as runningApps from './components/running-apps.js';
 import { canRunElevated } from './platform.js';
 import { trash as trashIcon } from './icons.js';
-import { classifyResultId, isSyntheticResultId, CLIPBOARD_DELETED_BANNER } from './catalog.js';
+import { classifyResultId, isSyntheticResultId, isCommandId, CLIPBOARD_DELETED_BANNER } from './catalog.js';
 import * as platform from './platform.js';
 import * as layout from './layout.js';
 
@@ -375,6 +375,16 @@ function handleKeyDown(e) {
             } else if ((e.shiftKey || shiftHeld) && results.hasPickedItems()) {
                 openAllPicked();
             } else {
+                const trimmed = queryInput?.value?.trim() || '';
+                if (trimmed.startsWith(':') || trimmed.startsWith('/')) {
+                    const cmdId = trimmed.slice(1).toLowerCase();
+                    if (isCommandId(cmdId) && commandMode && enterCommandModeFn) {
+                        commandMode.enterById(cmdId);
+                        enterCommandModeFn();
+                        queryInput.value = '';
+                        break;
+                    }
+                }
                 openSelected();
             }
             break;
