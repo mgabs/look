@@ -210,12 +210,7 @@ extension LauncherView {
         } else {
             let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
             if let cmd = extractInlineCommand(from: trimmed), !cmd.hasSpace {
-                if cmd.id == AppConstants.Launcher.Command.calc {
-                    query = "/calc "
-                    isQueryFocused = true
-                } else {
-                    enterCommandMode(commandID: cmd.id, prefilledInput: "")
-                }
+                enterCommandMode(commandID: cmd.id, prefilledInput: "")
             } else if let translationCommand = extractTranslationQuery(from: trimmed) {
                 handleTranslation(command: translationCommand)
                 isQueryFocused = true

@@ -1252,11 +1252,9 @@ struct LauncherView: View {
                 actionController.cancel()
             }
             if !isCommandMode, let cmd = extractInlineCommand(from: query), cmd.hasSpace {
-                if cmd.id != AppConstants.Launcher.Command.calc {
-                    aiAnswer.cancel()
-                    enterCommandMode(commandID: cmd.id, prefilledInput: cmd.args)
-                    return
-                }
+                aiAnswer.cancel()
+                enterCommandMode(commandID: cmd.id, prefilledInput: cmd.args)
+                return
             }
             previewLookupDefinition(for: query)
             if !isCommandMode {
