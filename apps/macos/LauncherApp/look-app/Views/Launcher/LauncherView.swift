@@ -436,7 +436,7 @@ struct LauncherView: View {
     }
 
     var isPathQuery: Bool {
-        !isCommandMode && extractInlineCommand(from: query) == nil && PathNavigationService.isPathQuery(query)
+        !isCommandMode && PathNavigationService.isPathQuery(query)
     }
 
     var pathResults: [LauncherResult] {
@@ -478,23 +478,31 @@ struct LauncherView: View {
         }
     }
 
-    /// A leading `:` opens the command-discovery menu: every command with its
-    /// description. Typing after the `:` (e.g. `:process`) filters by id and
-    /// description; picking one enters that command. A `:<exact-id> <args>`
-    /// live-trigger (e.g. `:calc 2+2`) jumps straight into the command instead
+    /// A leading `/` opens the command-discovery menu: every command with its
+    /// description. Typing after the `/` (e.g. `/process`) filters by id and
+    /// description; picking one enters that command. A `/<exact-id> <args>`
+    /// live-trigger (e.g. `/kill 1234`) jumps straight into the command instead
     /// (handled in `onChange(of: query)`), so it isn't a discovery query.
     var isCommandSuggestionQuery: Bool {
         guard !isCommandMode else { return false }
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard trimmed.hasPrefix(":") else { return false }
+        guard trimmed.hasPrefix("/") else { return false }
         if let cmd = extractInlineCommand(from: query), cmd.hasSpace { return false }
-        return true
+        let filter = commandSuggestionFilter
+        // A single "/" opens the full command catalog.
+        if filter.isEmpty { return true }
+        // If query has multiple slashes (e.g. "/Applications/"), it's a directory path, not a command.
+        if filter.contains("/") { return false }
+        // If valid path results exist for this query, let path navigation take precedence over command discovery.
+        if !pathResults.isEmpty { return false }
+        // Otherwise, only treat as command suggestion if it matches catalog commands.
+        return !AppConstants.Launcher.commandCatalog(matching: filter).isEmpty
     }
 
-    /// The text typed after the leading `:`, used to filter the command menu.
+    /// The text typed after the leading `/`, used to filter the command menu.
     var commandSuggestionFilter: String {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard trimmed.hasPrefix(":") else { return "" }
+        guard trimmed.hasPrefix("/") else { return "" }
         return String(trimmed.dropFirst())
     }
 
@@ -560,7 +568,12 @@ struct LauncherView: View {
         // A level owns the list: its rows are not in the index.
         if isInLevel { return levelResults }
         if isPrefixSuggestionQuery { return prefixSuggestionResults }
-        if isCommandSuggestionQuery { return commandSuggestionResults }
+        if isCommandSuggestionQuery {
+            if commandSuggestionFilter.isEmpty {
+                return commandSuggestionResults + pathResults
+            }
+            return commandSuggestionResults
+        }
         // Before the text history: `ci"` starts with `c`, but not with `c"`.
         if isClipboardImageQuery { return clipboardImageResults }
         if isClipboardQuery { return clipboardResults }

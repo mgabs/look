@@ -594,13 +594,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // :cmd <args> or /cmd <args> live trigger: jumps straight into that command's panel
-    // with the rest of the text prefilled (e.g. `:calc 2+2`, `/calc 2+2`, `:kill chrome`).
-    // Bare `:calc` without a trailing space stays in the discovery menu (matches
+    // \cmd <args> live trigger: jumps straight into that command's panel
+    // with the rest of the text prefilled (e.g. `\calc 2+2`, `\kill chrome`).
+    // Bare `\calc` without a trailing space stays in the discovery menu (matches
     // macOS extractInlineCommand semantics); the user can press Enter on the
     // highlighted row to enter the command with empty input.
     function tryCommandPrefix(value) {
-        if (!value.startsWith(':') && !value.startsWith('/')) return false;
+        if (!value.startsWith('\\')) return false;
         const rest = value.slice(1);
         const spaceIdx = rest.search(/\s/);
         // No whitespace → not a live trigger; let the discovery menu or Enter handle it.

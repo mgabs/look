@@ -54,13 +54,12 @@ extension LauncherView {
         focusActiveInput(recoveryDelays: [0.0, 0.04], activateApp: false)
     }
 
-    // Detects `:cmdid<space>...` or `/cmdid<space>...` (live trigger) and bare
-    // `:cmdid` or `/cmdid` (submit-only trigger). Returns nil if `input` doesn't
-    // begin with `:` or `/`, or the id after the prefix (up to the first whitespace)
-    // isn't an exact match for a command in the catalog. `hasSpace` distinguishes
-    // the two trigger paths.
+    // Detects `/cmdid<space>...` (live trigger) and bare `/cmdid` (submit-only
+    // trigger). Returns nil if `input` doesn't begin with `/` or the id after
+    // `/` (up to the first whitespace) isn't an exact match for a command in
+    // the catalog. `hasSpace` distinguishes the two trigger paths.
     func extractInlineCommand(from input: String) -> (id: String, args: String, hasSpace: Bool)? {
-        guard input.hasPrefix(":") || input.hasPrefix("/") else { return nil }
+        guard input.hasPrefix("/") else { return nil }
         let body = input.dropFirst()
 
         if let spaceIdx = body.firstIndex(where: { $0.isWhitespace }) {

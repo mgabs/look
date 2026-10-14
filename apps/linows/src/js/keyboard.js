@@ -376,7 +376,7 @@ function handleKeyDown(e) {
                 openAllPicked();
             } else {
                 const trimmed = queryInput?.value?.trim() || '';
-                if (trimmed.startsWith(':') || trimmed.startsWith('/')) {
+                if (trimmed.startsWith('\\')) {
                     const cmdId = trimmed.slice(1).toLowerCase();
                     if (isCommandId(cmdId) && commandMode && enterCommandModeFn) {
                         commandMode.enterById(cmdId);

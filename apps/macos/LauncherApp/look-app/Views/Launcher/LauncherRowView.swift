@@ -53,9 +53,10 @@ struct LauncherRowView: View {
     /// every icon in the list flicker. See `RowIconCache`.
     private var rowIcon: NSImage {
         switch syntheticRow {
-        case .commandSuggestion:
-            return RowIconCache.image(key: "symbol:terminal") {
-                NSImage(systemSymbolName: "terminal", accessibilityDescription: nil)
+        case .commandSuggestion(let commandID):
+            let symbol = AppConstants.Launcher.commandCatalog.first(where: { $0.id == commandID })?.symbolName ?? "terminal"
+            return RowIconCache.image(key: "symbol:\(symbol)") {
+                NSImage(systemSymbolName: symbol, accessibilityDescription: nil)
                     ?? NSWorkspace.shared.icon(for: .plainText)
             }
         case .calc:

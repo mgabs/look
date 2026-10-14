@@ -977,7 +977,7 @@ mod tests {
             assert_eq!(config.app_hotkeys[1].spec, "ctrl+option+s");
             assert_eq!(config.app_hotkeys[1].display, "Ctrl+Option+S");
         } else {
-            assert_eq!(config.app_hotkeys[0].spec, "alt+cmd+t");
+            assert_eq!(config.app_hotkeys[0].spec, "alt+win+t");
             assert_eq!(config.app_hotkeys[1].spec, "ctrl+alt+s");
             assert_eq!(config.app_hotkeys[1].display, "Ctrl+Alt+S");
         }
