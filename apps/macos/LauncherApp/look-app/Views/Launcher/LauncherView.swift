@@ -568,7 +568,12 @@ struct LauncherView: View {
         // A level owns the list: its rows are not in the index.
         if isInLevel { return levelResults }
         if isPrefixSuggestionQuery { return prefixSuggestionResults }
-        if isCommandSuggestionQuery { return commandSuggestionResults }
+        if isCommandSuggestionQuery {
+            if commandSuggestionFilter.isEmpty {
+                return commandSuggestionResults + pathResults
+            }
+            return commandSuggestionResults
+        }
         // Before the text history: `ci"` starts with `c`, but not with `c"`.
         if isClipboardImageQuery { return clipboardImageResults }
         if isClipboardQuery { return clipboardResults }
