@@ -277,11 +277,17 @@ private struct SecondaryCalendarBadge: View {
                 .font(themeStore.uiFont(size: Const.captionFontSize + 5, weight: .semibold))
                 .foregroundColor(themeStore.secondaryTextColor())
                 .monospacedDigit()
-            Text(badge.year)
+            Text(yearLabel)
                 .font(themeStore.uiFont(size: Const.captionFontSize - 1))
                 .foregroundColor(themeStore.mutedTextColor())
                 .monospacedDigit()
         }
+    }
+
+    private var yearLabel: String {
+        badge.label.isEmpty || badge.year.hasSuffix("AH")
+            ? badge.year
+            : "\(badge.year) \(badge.label)"
     }
 }
 
