@@ -301,7 +301,7 @@ The `:` prefix only triggers when the word right after it is a known command id 
 
 Built-in commands:
 
-- `calc`: evaluate expressions (supports `^`, `!`, constants `pi`/`e`, functions `sqrt`/`abs`/`round`/`floor`/`ceil`, `%` shorthand, implicit multiplication like `2pi`, comma-grouped/scientific-notation input like `1,500` or `1e6`, and aliases `x`/`:`/leading `v` honored wherever they land, e.g. `1920x1080`)
+- `calc`: evaluate expressions (supports `^`, `!`, constants `pi`/`e`, functions `sqrt`/`abs`/`round`/`floor`/`ceil`, `%` shorthand, implicit multiplication like `2pi`, comma-grouped/scientific-notation input like `1,500` or `1e6`, typographic operators and fractions like `3 × 4`, `10 ÷ 2` or `1½`, and aliases `x`/`:`/leading `v` honored wherever they land, e.g. `1920x1080`)
 - `shell`: run shell command text
 - `emoji`: search emoji by name or keyword; `Enter` copies, `Shift+Enter` types it into the app you came from (copy-only with a notice if insertion is not permitted); an empty query lists your last 20 emoji
 - `kill`: force-kill a running app/process (with confirmation), supports port queries like `:3000` or `port 3000`
