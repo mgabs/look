@@ -1,0 +1,514 @@
+[
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace search -> Vec<EmojiHit> with vec![]\n@@ -18,17 +18,17 @@\n pub struct EmojiHit {\n     pub glyph: String,\n     pub name: String,\n }\n \n /// Case-insensitive match over name and keywords, ranked name-prefix, then\n /// name-substring, then keyword. An empty query yields no hits.\n pub fn search(query: &str, limit: usize) -> Vec<EmojiHit> {\n-    search_in(data::EMOJI, query, limit)\n+    vec![] /* ~ changed by cargo-mutants ~ */\n }\n \n /// `search` over an explicit dataset, so ranking is testable without the\n /// bundled data. Ties keep dataset order.\n pub fn search_in(data: &[Emoji], query: &str, limit: usize) -> Vec<EmojiHit> {\n     let query = query.trim().to_lowercase();\n     if query.is_empty() || limit == 0 {\n         return Vec::new();\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "search",
+      "return_type": "-> Vec<EmojiHit>",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 27
+        },
+        "start": {
+          "column": 1,
+          "line": 23
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "emoji/src/lib.rs:26:5: replace search -> Vec<EmojiHit> with vec![]",
+    "package": "look-emoji",
+    "replacement": "vec![]",
+    "span": {
+      "end": {
+        "column": 41,
+        "line": 26
+      },
+      "start": {
+        "column": 5,
+        "line": 26
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace search -> Vec<EmojiHit> with vec![Default::default()]\n@@ -18,17 +18,17 @@\n pub struct EmojiHit {\n     pub glyph: String,\n     pub name: String,\n }\n \n /// Case-insensitive match over name and keywords, ranked name-prefix, then\n /// name-substring, then keyword. An empty query yields no hits.\n pub fn search(query: &str, limit: usize) -> Vec<EmojiHit> {\n-    search_in(data::EMOJI, query, limit)\n+    vec![Default::default()] /* ~ changed by cargo-mutants ~ */\n }\n \n /// `search` over an explicit dataset, so ranking is testable without the\n /// bundled data. Ties keep dataset order.\n pub fn search_in(data: &[Emoji], query: &str, limit: usize) -> Vec<EmojiHit> {\n     let query = query.trim().to_lowercase();\n     if query.is_empty() || limit == 0 {\n         return Vec::new();\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "search",
+      "return_type": "-> Vec<EmojiHit>",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 27
+        },
+        "start": {
+          "column": 1,
+          "line": 23
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "emoji/src/lib.rs:26:5: replace search -> Vec<EmojiHit> with vec![Default::default()]",
+    "package": "look-emoji",
+    "replacement": "vec![Default::default()]",
+    "span": {
+      "end": {
+        "column": 41,
+        "line": 26
+      },
+      "start": {
+        "column": 5,
+        "line": 26
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace search_in -> Vec<EmojiHit> with vec![]\n@@ -24,30 +24,17 @@\n /// name-substring, then keyword. An empty query yields no hits.\n pub fn search(query: &str, limit: usize) -> Vec<EmojiHit> {\n     search_in(data::EMOJI, query, limit)\n }\n \n /// `search` over an explicit dataset, so ranking is testable without the\n /// bundled data. Ties keep dataset order.\n pub fn search_in(data: &[Emoji], query: &str, limit: usize) -> Vec<EmojiHit> {\n-    let query = query.trim().to_lowercase();\n-    if query.is_empty() || limit == 0 {\n-        return Vec::new();\n-    }\n-    let mut ranked: Vec<(u8, &Emoji)> = data\n-        .iter()\n-        .filter_map(|e| rank(e, &query).map(|r| (r, e)))\n-        .collect();\n-    ranked.sort_by_key(|(r, _)| *r);\n-    ranked\n-        .into_iter()\n-        .take(limit)\n-        .map(|(_, e)| hit(e))\n-        .collect()\n+    vec![] /* ~ changed by cargo-mutants ~ */\n }\n \n /// Resolves a persisted glyph (e.g. a recent) back to its hit. Ignores the\n /// emoji variation selector so `❤` and `❤️` are the same emoji.\n pub fn lookup(glyph: &str) -> Option<EmojiHit> {\n     let wanted = strip_variation(glyph);\n     data::EMOJI\n         .iter()\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "search_in",
+      "return_type": "-> Vec<EmojiHit>",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 46
+        },
+        "start": {
+          "column": 1,
+          "line": 29
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "emoji/src/lib.rs:32:5: replace search_in -> Vec<EmojiHit> with vec![]",
+    "package": "look-emoji",
+    "replacement": "vec![]",
+    "span": {
+      "end": {
+        "column": 19,
+        "line": 45
+      },
+      "start": {
+        "column": 5,
+        "line": 32
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace search_in -> Vec<EmojiHit> with vec![Default::default()]\n@@ -24,30 +24,17 @@\n /// name-substring, then keyword. An empty query yields no hits.\n pub fn search(query: &str, limit: usize) -> Vec<EmojiHit> {\n     search_in(data::EMOJI, query, limit)\n }\n \n /// `search` over an explicit dataset, so ranking is testable without the\n /// bundled data. Ties keep dataset order.\n pub fn search_in(data: &[Emoji], query: &str, limit: usize) -> Vec<EmojiHit> {\n-    let query = query.trim().to_lowercase();\n-    if query.is_empty() || limit == 0 {\n-        return Vec::new();\n-    }\n-    let mut ranked: Vec<(u8, &Emoji)> = data\n-        .iter()\n-        .filter_map(|e| rank(e, &query).map(|r| (r, e)))\n-        .collect();\n-    ranked.sort_by_key(|(r, _)| *r);\n-    ranked\n-        .into_iter()\n-        .take(limit)\n-        .map(|(_, e)| hit(e))\n-        .collect()\n+    vec![Default::default()] /* ~ changed by cargo-mutants ~ */\n }\n \n /// Resolves a persisted glyph (e.g. a recent) back to its hit. Ignores the\n /// emoji variation selector so `❤` and `❤️` are the same emoji.\n pub fn lookup(glyph: &str) -> Option<EmojiHit> {\n     let wanted = strip_variation(glyph);\n     data::EMOJI\n         .iter()\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "search_in",
+      "return_type": "-> Vec<EmojiHit>",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 46
+        },
+        "start": {
+          "column": 1,
+          "line": 29
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "emoji/src/lib.rs:32:5: replace search_in -> Vec<EmojiHit> with vec![Default::default()]",
+    "package": "look-emoji",
+    "replacement": "vec![Default::default()]",
+    "span": {
+      "end": {
+        "column": 19,
+        "line": 45
+      },
+      "start": {
+        "column": 5,
+        "line": 32
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace || with && in search_in\n@@ -25,17 +25,17 @@\n pub fn search(query: &str, limit: usize) -> Vec<EmojiHit> {\n     search_in(data::EMOJI, query, limit)\n }\n \n /// `search` over an explicit dataset, so ranking is testable without the\n /// bundled data. Ties keep dataset order.\n pub fn search_in(data: &[Emoji], query: &str, limit: usize) -> Vec<EmojiHit> {\n     let query = query.trim().to_lowercase();\n-    if query.is_empty() || limit == 0 {\n+    if query.is_empty() && /* ~ changed by cargo-mutants ~ */ limit == 0 {\n         return Vec::new();\n     }\n     let mut ranked: Vec<(u8, &Emoji)> = data\n         .iter()\n         .filter_map(|e| rank(e, &query).map(|r| (r, e)))\n         .collect();\n     ranked.sort_by_key(|(r, _)| *r);\n     ranked\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "search_in",
+      "return_type": "-> Vec<EmojiHit>",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 46
+        },
+        "start": {
+          "column": 1,
+          "line": 29
+        }
+      }
+    },
+    "genre": "BinaryOperator",
+    "name": "emoji/src/lib.rs:33:25: replace || with && in search_in",
+    "package": "look-emoji",
+    "replacement": "&&",
+    "span": {
+      "end": {
+        "column": 27,
+        "line": 33
+      },
+      "start": {
+        "column": 25,
+        "line": 33
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace == with != in search_in\n@@ -25,17 +25,17 @@\n pub fn search(query: &str, limit: usize) -> Vec<EmojiHit> {\n     search_in(data::EMOJI, query, limit)\n }\n \n /// `search` over an explicit dataset, so ranking is testable without the\n /// bundled data. Ties keep dataset order.\n pub fn search_in(data: &[Emoji], query: &str, limit: usize) -> Vec<EmojiHit> {\n     let query = query.trim().to_lowercase();\n-    if query.is_empty() || limit == 0 {\n+    if query.is_empty() || limit != /* ~ changed by cargo-mutants ~ */ 0 {\n         return Vec::new();\n     }\n     let mut ranked: Vec<(u8, &Emoji)> = data\n         .iter()\n         .filter_map(|e| rank(e, &query).map(|r| (r, e)))\n         .collect();\n     ranked.sort_by_key(|(r, _)| *r);\n     ranked\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "search_in",
+      "return_type": "-> Vec<EmojiHit>",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 46
+        },
+        "start": {
+          "column": 1,
+          "line": 29
+        }
+      }
+    },
+    "genre": "BinaryOperator",
+    "name": "emoji/src/lib.rs:33:34: replace == with != in search_in",
+    "package": "look-emoji",
+    "replacement": "!=",
+    "span": {
+      "end": {
+        "column": 36,
+        "line": 33
+      },
+      "start": {
+        "column": 34,
+        "line": 33
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace lookup -> Option<EmojiHit> with None\n@@ -43,21 +43,17 @@\n         .take(limit)\n         .map(|(_, e)| hit(e))\n         .collect()\n }\n \n /// Resolves a persisted glyph (e.g. a recent) back to its hit. Ignores the\n /// emoji variation selector so `❤` and `❤️` are the same emoji.\n pub fn lookup(glyph: &str) -> Option<EmojiHit> {\n-    let wanted = strip_variation(glyph);\n-    data::EMOJI\n-        .iter()\n-        .find(|e| strip_variation(e.glyph) == wanted)\n-        .map(hit)\n+    None /* ~ changed by cargo-mutants ~ */\n }\n \n fn rank(e: &Emoji, query: &str) -> Option<u8> {\n     let name = e.name.to_lowercase();\n     if name.starts_with(query) {\n         Some(0)\n     } else if name.contains(query) {\n         Some(1)\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "lookup",
+      "return_type": "-> Option<EmojiHit>",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 56
+        },
+        "start": {
+          "column": 1,
+          "line": 48
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "emoji/src/lib.rs:51:5: replace lookup -> Option<EmojiHit> with None",
+    "package": "look-emoji",
+    "replacement": "None",
+    "span": {
+      "end": {
+        "column": 18,
+        "line": 55
+      },
+      "start": {
+        "column": 5,
+        "line": 51
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace lookup -> Option<EmojiHit> with Some(Default::default())\n@@ -43,21 +43,17 @@\n         .take(limit)\n         .map(|(_, e)| hit(e))\n         .collect()\n }\n \n /// Resolves a persisted glyph (e.g. a recent) back to its hit. Ignores the\n /// emoji variation selector so `❤` and `❤️` are the same emoji.\n pub fn lookup(glyph: &str) -> Option<EmojiHit> {\n-    let wanted = strip_variation(glyph);\n-    data::EMOJI\n-        .iter()\n-        .find(|e| strip_variation(e.glyph) == wanted)\n-        .map(hit)\n+    Some(Default::default()) /* ~ changed by cargo-mutants ~ */\n }\n \n fn rank(e: &Emoji, query: &str) -> Option<u8> {\n     let name = e.name.to_lowercase();\n     if name.starts_with(query) {\n         Some(0)\n     } else if name.contains(query) {\n         Some(1)\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "lookup",
+      "return_type": "-> Option<EmojiHit>",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 56
+        },
+        "start": {
+          "column": 1,
+          "line": 48
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "emoji/src/lib.rs:51:5: replace lookup -> Option<EmojiHit> with Some(Default::default())",
+    "package": "look-emoji",
+    "replacement": "Some(Default::default())",
+    "span": {
+      "end": {
+        "column": 18,
+        "line": 55
+      },
+      "start": {
+        "column": 5,
+        "line": 51
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace == with != in lookup\n@@ -46,17 +46,17 @@\n }\n \n /// Resolves a persisted glyph (e.g. a recent) back to its hit. Ignores the\n /// emoji variation selector so `❤` and `❤️` are the same emoji.\n pub fn lookup(glyph: &str) -> Option<EmojiHit> {\n     let wanted = strip_variation(glyph);\n     data::EMOJI\n         .iter()\n-        .find(|e| strip_variation(e.glyph) == wanted)\n+        .find(|e| strip_variation(e.glyph) != /* ~ changed by cargo-mutants ~ */ wanted)\n         .map(hit)\n }\n \n fn rank(e: &Emoji, query: &str) -> Option<u8> {\n     let name = e.name.to_lowercase();\n     if name.starts_with(query) {\n         Some(0)\n     } else if name.contains(query) {\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "lookup",
+      "return_type": "-> Option<EmojiHit>",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 56
+        },
+        "start": {
+          "column": 1,
+          "line": 48
+        }
+      }
+    },
+    "genre": "BinaryOperator",
+    "name": "emoji/src/lib.rs:54:44: replace == with != in lookup",
+    "package": "look-emoji",
+    "replacement": "!=",
+    "span": {
+      "end": {
+        "column": 46,
+        "line": 54
+      },
+      "start": {
+        "column": 44,
+        "line": 54
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace rank -> Option<u8> with None\n@@ -51,26 +51,17 @@\n     let wanted = strip_variation(glyph);\n     data::EMOJI\n         .iter()\n         .find(|e| strip_variation(e.glyph) == wanted)\n         .map(hit)\n }\n \n fn rank(e: &Emoji, query: &str) -> Option<u8> {\n-    let name = e.name.to_lowercase();\n-    if name.starts_with(query) {\n-        Some(0)\n-    } else if name.contains(query) {\n-        Some(1)\n-    } else if e.keywords.iter().any(|k| k.to_lowercase().contains(query)) {\n-        Some(2)\n-    } else {\n-        None\n-    }\n+    None /* ~ changed by cargo-mutants ~ */\n }\n \n fn hit(e: &Emoji) -> EmojiHit {\n     EmojiHit {\n         glyph: e.glyph.to_string(),\n         name: e.name.to_string(),\n     }\n }\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "rank",
+      "return_type": "-> Option<u8>",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 69
+        },
+        "start": {
+          "column": 1,
+          "line": 58
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "emoji/src/lib.rs:59:5: replace rank -> Option<u8> with None",
+    "package": "look-emoji",
+    "replacement": "None",
+    "span": {
+      "end": {
+        "column": 6,
+        "line": 68
+      },
+      "start": {
+        "column": 5,
+        "line": 59
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace rank -> Option<u8> with Some(0)\n@@ -51,26 +51,17 @@\n     let wanted = strip_variation(glyph);\n     data::EMOJI\n         .iter()\n         .find(|e| strip_variation(e.glyph) == wanted)\n         .map(hit)\n }\n \n fn rank(e: &Emoji, query: &str) -> Option<u8> {\n-    let name = e.name.to_lowercase();\n-    if name.starts_with(query) {\n-        Some(0)\n-    } else if name.contains(query) {\n-        Some(1)\n-    } else if e.keywords.iter().any(|k| k.to_lowercase().contains(query)) {\n-        Some(2)\n-    } else {\n-        None\n-    }\n+    Some(0) /* ~ changed by cargo-mutants ~ */\n }\n \n fn hit(e: &Emoji) -> EmojiHit {\n     EmojiHit {\n         glyph: e.glyph.to_string(),\n         name: e.name.to_string(),\n     }\n }\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "rank",
+      "return_type": "-> Option<u8>",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 69
+        },
+        "start": {
+          "column": 1,
+          "line": 58
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "emoji/src/lib.rs:59:5: replace rank -> Option<u8> with Some(0)",
+    "package": "look-emoji",
+    "replacement": "Some(0)",
+    "span": {
+      "end": {
+        "column": 6,
+        "line": 68
+      },
+      "start": {
+        "column": 5,
+        "line": 59
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace rank -> Option<u8> with Some(1)\n@@ -51,26 +51,17 @@\n     let wanted = strip_variation(glyph);\n     data::EMOJI\n         .iter()\n         .find(|e| strip_variation(e.glyph) == wanted)\n         .map(hit)\n }\n \n fn rank(e: &Emoji, query: &str) -> Option<u8> {\n-    let name = e.name.to_lowercase();\n-    if name.starts_with(query) {\n-        Some(0)\n-    } else if name.contains(query) {\n-        Some(1)\n-    } else if e.keywords.iter().any(|k| k.to_lowercase().contains(query)) {\n-        Some(2)\n-    } else {\n-        None\n-    }\n+    Some(1) /* ~ changed by cargo-mutants ~ */\n }\n \n fn hit(e: &Emoji) -> EmojiHit {\n     EmojiHit {\n         glyph: e.glyph.to_string(),\n         name: e.name.to_string(),\n     }\n }\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "rank",
+      "return_type": "-> Option<u8>",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 69
+        },
+        "start": {
+          "column": 1,
+          "line": 58
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "emoji/src/lib.rs:59:5: replace rank -> Option<u8> with Some(1)",
+    "package": "look-emoji",
+    "replacement": "Some(1)",
+    "span": {
+      "end": {
+        "column": 6,
+        "line": 68
+      },
+      "start": {
+        "column": 5,
+        "line": 59
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace hit -> EmojiHit with Default::default()\n@@ -64,17 +64,14 @@\n     } else if e.keywords.iter().any(|k| k.to_lowercase().contains(query)) {\n         Some(2)\n     } else {\n         None\n     }\n }\n \n fn hit(e: &Emoji) -> EmojiHit {\n-    EmojiHit {\n-        glyph: e.glyph.to_string(),\n-        name: e.name.to_string(),\n-    }\n+    Default::default() /* ~ changed by cargo-mutants ~ */\n }\n \n fn strip_variation(s: &str) -> String {\n     s.chars().filter(|&c| c != '\\u{fe0f}').collect()\n }\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "hit",
+      "return_type": "-> EmojiHit",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 76
+        },
+        "start": {
+          "column": 1,
+          "line": 71
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "emoji/src/lib.rs:72:5: replace hit -> EmojiHit with Default::default()",
+    "package": "look-emoji",
+    "replacement": "Default::default()",
+    "span": {
+      "end": {
+        "column": 6,
+        "line": 75
+      },
+      "start": {
+        "column": 5,
+        "line": 72
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace strip_variation -> String with String::new()\n@@ -71,10 +71,10 @@\n fn hit(e: &Emoji) -> EmojiHit {\n     EmojiHit {\n         glyph: e.glyph.to_string(),\n         name: e.name.to_string(),\n     }\n }\n \n fn strip_variation(s: &str) -> String {\n-    s.chars().filter(|&c| c != '\\u{fe0f}').collect()\n+    String::new() /* ~ changed by cargo-mutants ~ */\n }\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "strip_variation",
+      "return_type": "-> String",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 80
+        },
+        "start": {
+          "column": 1,
+          "line": 78
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "emoji/src/lib.rs:79:5: replace strip_variation -> String with String::new()",
+    "package": "look-emoji",
+    "replacement": "String::new()",
+    "span": {
+      "end": {
+        "column": 53,
+        "line": 79
+      },
+      "start": {
+        "column": 5,
+        "line": 79
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace strip_variation -> String with \"xyzzy\".into()\n@@ -71,10 +71,10 @@\n fn hit(e: &Emoji) -> EmojiHit {\n     EmojiHit {\n         glyph: e.glyph.to_string(),\n         name: e.name.to_string(),\n     }\n }\n \n fn strip_variation(s: &str) -> String {\n-    s.chars().filter(|&c| c != '\\u{fe0f}').collect()\n+    \"xyzzy\".into() /* ~ changed by cargo-mutants ~ */\n }\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "strip_variation",
+      "return_type": "-> String",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 80
+        },
+        "start": {
+          "column": 1,
+          "line": 78
+        }
+      }
+    },
+    "genre": "FnValue",
+    "name": "emoji/src/lib.rs:79:5: replace strip_variation -> String with \"xyzzy\".into()",
+    "package": "look-emoji",
+    "replacement": "\"xyzzy\".into()",
+    "span": {
+      "end": {
+        "column": 53,
+        "line": 79
+      },
+      "start": {
+        "column": 5,
+        "line": 79
+      }
+    }
+  },
+  {
+    "diff": "--- emoji/src/lib.rs\n+++ replace != with == in strip_variation\n@@ -71,10 +71,10 @@\n fn hit(e: &Emoji) -> EmojiHit {\n     EmojiHit {\n         glyph: e.glyph.to_string(),\n         name: e.name.to_string(),\n     }\n }\n \n fn strip_variation(s: &str) -> String {\n-    s.chars().filter(|&c| c != '\\u{fe0f}').collect()\n+    s.chars().filter(|&c| c == /* ~ changed by cargo-mutants ~ */ '\\u{fe0f}').collect()\n }\n",
+    "file": "emoji/src/lib.rs",
+    "function": {
+      "function_name": "strip_variation",
+      "return_type": "-> String",
+      "span": {
+        "end": {
+          "column": 2,
+          "line": 80
+        },
+        "start": {
+          "column": 1,
+          "line": 78
+        }
+      }
+    },
+    "genre": "BinaryOperator",
+    "name": "emoji/src/lib.rs:79:29: replace != with == in strip_variation",
+    "package": "look-emoji",
+    "replacement": "==",
+    "span": {
+      "end": {
+        "column": 31,
+        "line": 79
+      },
+      "start": {
+        "column": 29,
+        "line": 79
+      }
+    }
+  }
+]

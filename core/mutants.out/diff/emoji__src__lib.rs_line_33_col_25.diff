@@ -1,0 +1,21 @@
+--- emoji/src/lib.rs
++++ replace || with && in search_in
+@@ -25,17 +25,17 @@
+ pub fn search(query: &str, limit: usize) -> Vec<EmojiHit> {
+     search_in(data::EMOJI, query, limit)
+ }
+ 
+ /// `search` over an explicit dataset, so ranking is testable without the
+ /// bundled data. Ties keep dataset order.
+ pub fn search_in(data: &[Emoji], query: &str, limit: usize) -> Vec<EmojiHit> {
+     let query = query.trim().to_lowercase();
+-    if query.is_empty() || limit == 0 {
++    if query.is_empty() && /* ~ changed by cargo-mutants ~ */ limit == 0 {
+         return Vec::new();
+     }
+     let mut ranked: Vec<(u8, &Emoji)> = data
+         .iter()
+         .filter_map(|e| rank(e, &query).map(|r| (r, e)))
+         .collect();
+     ranked.sort_by_key(|(r, _)| *r);
+     ranked

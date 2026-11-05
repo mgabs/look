@@ -1,0 +1,25 @@
+--- emoji/src/lib.rs
++++ replace lookup -> Option<EmojiHit> with None
+@@ -43,21 +43,17 @@
+         .take(limit)
+         .map(|(_, e)| hit(e))
+         .collect()
+ }
+ 
+ /// Resolves a persisted glyph (e.g. a recent) back to its hit. Ignores the
+ /// emoji variation selector so `❤` and `❤️` are the same emoji.
+ pub fn lookup(glyph: &str) -> Option<EmojiHit> {
+-    let wanted = strip_variation(glyph);
+-    data::EMOJI
+-        .iter()
+-        .find(|e| strip_variation(e.glyph) == wanted)
+-        .map(hit)
++    None /* ~ changed by cargo-mutants ~ */
+ }
+ 
+ fn rank(e: &Emoji, query: &str) -> Option<u8> {
+     let name = e.name.to_lowercase();
+     if name.starts_with(query) {
+         Some(0)
+     } else if name.contains(query) {
+         Some(1)
