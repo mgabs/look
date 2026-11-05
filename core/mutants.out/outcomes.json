@@ -1,0 +1,1040 @@
+{
+  "outcomes": [
+    {
+      "scenario": "Baseline",
+      "summary": "Success",
+      "log_path": "log/baseline.log",
+      "diff_path": null,
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 3.750212083,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.430328791,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:26:5: replace search -> Vec<EmojiHit> with vec![]",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "search",
+            "return_type": "-> Vec<EmojiHit>",
+            "span": {
+              "start": {
+                "line": 23,
+                "column": 1
+              },
+              "end": {
+                "line": 27,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 26,
+              "column": 5
+            },
+            "end": {
+              "line": 26,
+              "column": 41
+            }
+          },
+          "replacement": "vec![]",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/emoji__src__lib.rs_line_26_col_5.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_26_col_5.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.381279833,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.384845875,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:26:5: replace search -> Vec<EmojiHit> with vec![Default::default()]",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "search",
+            "return_type": "-> Vec<EmojiHit>",
+            "span": {
+              "start": {
+                "line": 23,
+                "column": 1
+              },
+              "end": {
+                "line": 27,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 26,
+              "column": 5
+            },
+            "end": {
+              "line": 26,
+              "column": 41
+            }
+          },
+          "replacement": "vec![Default::default()]",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "Unviable",
+      "log_path": "log/emoji__src__lib.rs_line_26_col_5_001.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_26_col_5_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.167801125,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:32:5: replace search_in -> Vec<EmojiHit> with vec![]",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "search_in",
+            "return_type": "-> Vec<EmojiHit>",
+            "span": {
+              "start": {
+                "line": 29,
+                "column": 1
+              },
+              "end": {
+                "line": 46,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 32,
+              "column": 5
+            },
+            "end": {
+              "line": 45,
+              "column": 19
+            }
+          },
+          "replacement": "vec![]",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/emoji__src__lib.rs_line_32_col_5.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_32_col_5.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.383399792,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.383114917,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:32:5: replace search_in -> Vec<EmojiHit> with vec![Default::default()]",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "search_in",
+            "return_type": "-> Vec<EmojiHit>",
+            "span": {
+              "start": {
+                "line": 29,
+                "column": 1
+              },
+              "end": {
+                "line": 46,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 32,
+              "column": 5
+            },
+            "end": {
+              "line": 45,
+              "column": 19
+            }
+          },
+          "replacement": "vec![Default::default()]",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "Unviable",
+      "log_path": "log/emoji__src__lib.rs_line_32_col_5_001.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_32_col_5_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.168467042,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:33:25: replace || with && in search_in",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "search_in",
+            "return_type": "-> Vec<EmojiHit>",
+            "span": {
+              "start": {
+                "line": 29,
+                "column": 1
+              },
+              "end": {
+                "line": 46,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 33,
+              "column": 25
+            },
+            "end": {
+              "line": 33,
+              "column": 27
+            }
+          },
+          "replacement": "&&",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/emoji__src__lib.rs_line_33_col_25.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_33_col_25.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.439476292,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.38623675,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:33:34: replace == with != in search_in",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "search_in",
+            "return_type": "-> Vec<EmojiHit>",
+            "span": {
+              "start": {
+                "line": 29,
+                "column": 1
+              },
+              "end": {
+                "line": 46,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 33,
+              "column": 34
+            },
+            "end": {
+              "line": 33,
+              "column": 36
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/emoji__src__lib.rs_line_33_col_34.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_33_col_34.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.379115333,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.379961292,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:51:5: replace lookup -> Option<EmojiHit> with None",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "lookup",
+            "return_type": "-> Option<EmojiHit>",
+            "span": {
+              "start": {
+                "line": 48,
+                "column": 1
+              },
+              "end": {
+                "line": 56,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 51,
+              "column": 5
+            },
+            "end": {
+              "line": 55,
+              "column": 18
+            }
+          },
+          "replacement": "None",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/emoji__src__lib.rs_line_51_col_5.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_51_col_5.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.383807834,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.387322625,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:51:5: replace lookup -> Option<EmojiHit> with Some(Default::default())",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "lookup",
+            "return_type": "-> Option<EmojiHit>",
+            "span": {
+              "start": {
+                "line": 48,
+                "column": 1
+              },
+              "end": {
+                "line": 56,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 51,
+              "column": 5
+            },
+            "end": {
+              "line": 55,
+              "column": 18
+            }
+          },
+          "replacement": "Some(Default::default())",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "Unviable",
+      "log_path": "log/emoji__src__lib.rs_line_51_col_5_001.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_51_col_5_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.168437959,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:54:44: replace == with != in lookup",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "lookup",
+            "return_type": "-> Option<EmojiHit>",
+            "span": {
+              "start": {
+                "line": 48,
+                "column": 1
+              },
+              "end": {
+                "line": 56,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 54,
+              "column": 44
+            },
+            "end": {
+              "line": 54,
+              "column": 46
+            }
+          },
+          "replacement": "!=",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/emoji__src__lib.rs_line_54_col_44.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_54_col_44.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.381462292,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.386029541,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:59:5: replace rank -> Option<u8> with None",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "rank",
+            "return_type": "-> Option<u8>",
+            "span": {
+              "start": {
+                "line": 58,
+                "column": 1
+              },
+              "end": {
+                "line": 69,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 59,
+              "column": 5
+            },
+            "end": {
+              "line": 68,
+              "column": 6
+            }
+          },
+          "replacement": "None",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/emoji__src__lib.rs_line_59_col_5.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_59_col_5.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.385427417,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.38751775,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:59:5: replace rank -> Option<u8> with Some(0)",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "rank",
+            "return_type": "-> Option<u8>",
+            "span": {
+              "start": {
+                "line": 58,
+                "column": 1
+              },
+              "end": {
+                "line": 69,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 59,
+              "column": 5
+            },
+            "end": {
+              "line": 68,
+              "column": 6
+            }
+          },
+          "replacement": "Some(0)",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/emoji__src__lib.rs_line_59_col_5_001.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_59_col_5_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.332071291,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.383272292,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:59:5: replace rank -> Option<u8> with Some(1)",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "rank",
+            "return_type": "-> Option<u8>",
+            "span": {
+              "start": {
+                "line": 58,
+                "column": 1
+              },
+              "end": {
+                "line": 69,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 59,
+              "column": 5
+            },
+            "end": {
+              "line": 68,
+              "column": 6
+            }
+          },
+          "replacement": "Some(1)",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/emoji__src__lib.rs_line_59_col_5_002.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_59_col_5_002.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.384534,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.38596925,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:72:5: replace hit -> EmojiHit with Default::default()",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "hit",
+            "return_type": "-> EmojiHit",
+            "span": {
+              "start": {
+                "line": 71,
+                "column": 1
+              },
+              "end": {
+                "line": 76,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 72,
+              "column": 5
+            },
+            "end": {
+              "line": 75,
+              "column": 6
+            }
+          },
+          "replacement": "Default::default()",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "Unviable",
+      "log_path": "log/emoji__src__lib.rs_line_72_col_5.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_72_col_5.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.169573,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:79:5: replace strip_variation -> String with String::new()",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "strip_variation",
+            "return_type": "-> String",
+            "span": {
+              "start": {
+                "line": 78,
+                "column": 1
+              },
+              "end": {
+                "line": 80,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 79,
+              "column": 5
+            },
+            "end": {
+              "line": 79,
+              "column": 53
+            }
+          },
+          "replacement": "String::new()",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/emoji__src__lib.rs_line_79_col_5.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_79_col_5.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.384421792,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.381982875,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:79:5: replace strip_variation -> String with \"xyzzy\".into()",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "strip_variation",
+            "return_type": "-> String",
+            "span": {
+              "start": {
+                "line": 78,
+                "column": 1
+              },
+              "end": {
+                "line": 80,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 79,
+              "column": 5
+            },
+            "end": {
+              "line": 79,
+              "column": 53
+            }
+          },
+          "replacement": "\"xyzzy\".into()",
+          "genre": "FnValue"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/emoji__src__lib.rs_line_79_col_5_001.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_79_col_5_001.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.388612833,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.387447625,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": {
+        "Mutant": {
+          "name": "emoji/src/lib.rs:79:29: replace != with == in strip_variation",
+          "package": "look-emoji",
+          "file": "emoji/src/lib.rs",
+          "function": {
+            "function_name": "strip_variation",
+            "return_type": "-> String",
+            "span": {
+              "start": {
+                "line": 78,
+                "column": 1
+              },
+              "end": {
+                "line": 80,
+                "column": 2
+              }
+            }
+          },
+          "span": {
+            "start": {
+              "line": 79,
+              "column": 29
+            },
+            "end": {
+              "line": 79,
+              "column": 31
+            }
+          },
+          "replacement": "==",
+          "genre": "BinaryOperator"
+        }
+      },
+      "summary": "CaughtMutant",
+      "log_path": "log/emoji__src__lib.rs_line_79_col_29.log",
+      "diff_path": "diff/emoji__src__lib.rs_line_79_col_29.diff",
+      "phase_results": [
+        {
+          "phase": "Build",
+          "duration": 0.386567584,
+          "process_status": "Success",
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--no-run",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        },
+        {
+          "phase": "Test",
+          "duration": 0.434410333,
+          "process_status": {
+            "Failure": 101
+          },
+          "argv": [
+            "/Users/mmetawea/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo",
+            "test",
+            "--verbose",
+            "--package=look-emoji@0.1.0"
+          ]
+        }
+      ]
+    }
+  ],
+  "total_mutants": 16,
+  "missed": 0,
+  "caught": 12,
+  "timeout": 0,
+  "unviable": 4,
+  "success": 0,
+  "start_time": "2026-11-05T18:44:36.372945Z",
+  "end_time": "2026-11-05T18:44:50.704014Z",
+  "cargo_mutants_version": "27.1.0"
+}

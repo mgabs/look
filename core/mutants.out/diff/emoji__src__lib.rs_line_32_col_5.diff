@@ -1,0 +1,34 @@
+--- emoji/src/lib.rs
++++ replace search_in -> Vec<EmojiHit> with vec![]
+@@ -24,30 +24,17 @@
+ /// name-substring, then keyword. An empty query yields no hits.
+ pub fn search(query: &str, limit: usize) -> Vec<EmojiHit> {
+     search_in(data::EMOJI, query, limit)
+ }
+ 
+ /// `search` over an explicit dataset, so ranking is testable without the
+ /// bundled data. Ties keep dataset order.
+ pub fn search_in(data: &[Emoji], query: &str, limit: usize) -> Vec<EmojiHit> {
+-    let query = query.trim().to_lowercase();
+-    if query.is_empty() || limit == 0 {
+-        return Vec::new();
+-    }
+-    let mut ranked: Vec<(u8, &Emoji)> = data
+-        .iter()
+-        .filter_map(|e| rank(e, &query).map(|r| (r, e)))
+-        .collect();
+-    ranked.sort_by_key(|(r, _)| *r);
+-    ranked
+-        .into_iter()
+-        .take(limit)
+-        .map(|(_, e)| hit(e))
+-        .collect()
++    vec![] /* ~ changed by cargo-mutants ~ */
+ }
+ 
+ /// Resolves a persisted glyph (e.g. a recent) back to its hit. Ignores the
+ /// emoji variation selector so `❤` and `❤️` are the same emoji.
+ pub fn lookup(glyph: &str) -> Option<EmojiHit> {
+     let wanted = strip_variation(glyph);
+     data::EMOJI
+         .iter()

@@ -1,0 +1,4 @@
+emoji/src/lib.rs:26:5: replace search -> Vec<EmojiHit> with vec![Default::default()]
+emoji/src/lib.rs:32:5: replace search_in -> Vec<EmojiHit> with vec![Default::default()]
+emoji/src/lib.rs:51:5: replace lookup -> Option<EmojiHit> with Some(Default::default())
+emoji/src/lib.rs:72:5: replace hit -> EmojiHit with Default::default()
