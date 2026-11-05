@@ -54,7 +54,7 @@ libloading = "0.9"
 # xclip each advertise a single MIME type per invocation. Pinned to the version
 # WebKitGTK already pulls in, so this adds no new build.
 gtk = "0.18"
-zip = { version = "8", default-features = false, features = ["deflate"] }
+zip = { version = "9", default-features = false, features = ["deflate"] }
 # "system" pins the libwayland backend: blur binds against GTK's own
 # wl_display, which only the sys backend can adopt.
 wayland-client = { version = "0.31", features = ["system"], default-features = false }
