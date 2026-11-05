@@ -5,11 +5,13 @@ Feature: /emoji panel (REQ-EMOJI-2 to REQ-EMOJI-5)
     When the user opens /emoji
     Then the search field is focused and recents are shown
 
+  # REQ-EMOJI-3
   Scenario: Enter copies
     Given the query "smile" shows results
     When the user presses Enter on the selected emoji
     Then the glyph is on the clipboard and a "Copied" notice is shown
 
+  # REQ-EMOJI-4
   Scenario: Shift+Enter inserts
     Given the query "smile" shows results and insertion is permitted
     When the user presses Shift+Enter on the selected emoji
